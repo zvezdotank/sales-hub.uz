@@ -22,7 +22,36 @@ document.addEventListener('DOMContentLoaded', () => {
   initScrollTop();
   initContactForm();
   initSchedule();
+  initAnalytics();
 });
+
+// --- Аналитика --------------------------------------------------------------
+// Просмотры страниц GA4 считает сам. Здесь — обращения: без них в отчёте видно
+// трафик, но не видно, во что он превращается.
+
+function track(event, params) {
+  if (typeof window.gtag === 'function') window.gtag('event', event, params || {});
+}
+
+function initAnalytics() {
+  // Делегирование на документ: один обработчик вместо десятка, и он
+  // продолжит работать для элементов, добавленных позже.
+  document.addEventListener('click', (e) => {
+    const link = e.target.closest('a');
+    if (!link) return;
+
+    const href = link.getAttribute('href') || '';
+    const where = link.closest('.mobile-dock') ? 'mobile_dock'
+      : link.closest('.site-header') ? 'header'
+      : link.closest('.cta-contact') ? 'contacts'
+      : link.closest('.site-footer') ? 'footer'
+      : 'page';
+
+    if (href.startsWith('tel:')) track('click_phone', { location: where });
+    else if (href.includes('t.me/')) track('click_telegram', { location: where });
+    else if (href.startsWith('mailto:')) track('click_email', { location: where });
+  });
+}
 
 // --- Звёздный фон -----------------------------------------------------------
 
@@ -331,6 +360,7 @@ function initContactForm() {
 
     // Обработчик ещё не подключён: не делаем вид, что заявка ушла.
     if (!FORM_ENDPOINT) {
+      track('form_blocked');
       note.className = 'form-note error';
       note.innerHTML =
         'Отправка формы пока не подключена. Напишите нам в ' +
@@ -352,10 +382,12 @@ function initContactForm() {
       if (!response.ok) throw new Error('HTTP ' + response.status);
 
       form.reset();
+      track('generate_lead', { method: 'form' });
       buttonText.textContent = 'Отправлено ✓';
       note.className = 'form-note success';
       note.textContent = 'Заявка принята. Свяжемся с вами в течение рабочего дня.';
     } catch (error) {
+      track('form_error');
       buttonText.textContent = 'Отправить заявку';
       note.className = 'form-note error';
       note.innerHTML =

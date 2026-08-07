@@ -33,7 +33,17 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+{{? site.ga4 }}<link rel="preconnect" href="https://www.googletagmanager.com">{{/ site.ga4 }}
 <link rel="stylesheet" href="css/styles.css?v={{ cssVersion }}">
 <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Michroma&amp;family=Archivo:wght@400;600;700&amp;family=Share+Tech+Mono&amp;display=swap" onload="this.rel='stylesheet'">
 <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Michroma&amp;family=Archivo:wght@400;600;700&amp;family=Share+Tech+Mono&amp;display=swap"></noscript>
 {{& structuredData }}
+{{? site.ga4 }}
+<script async src="https://www.googletagmanager.com/gtag/js?id={{ site.ga4 }}"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', '{{ site.ga4 }}');
+</script>
+{{/ site.ga4 }}
