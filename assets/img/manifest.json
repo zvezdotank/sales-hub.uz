@@ -1,0 +1,110 @@
+{
+  "contact-mars": {
+    "bg": [
+      640,
+      640
+    ]
+  },
+  "hero-rover": {
+    "hero": [
+      1920,
+      1175
+    ]
+  },
+  "process-missioncontrol": {
+    "banner": [
+      1400,
+      781
+    ],
+    "card": [
+      800,
+      446
+    ],
+    "hero": [
+      1920,
+      1071
+    ]
+  },
+  "service-adaccess": {
+    "card": [
+      800,
+      446
+    ],
+    "hero": [
+      1920,
+      1071
+    ]
+  },
+  "service-analytics": {
+    "card": [
+      800,
+      446
+    ],
+    "hero": [
+      1920,
+      1071
+    ]
+  },
+  "service-context": {
+    "card": [
+      800,
+      600
+    ],
+    "hero": [
+      1920,
+      1441
+    ]
+  },
+  "service-seo": {
+    "card": [
+      800,
+      640
+    ],
+    "hero": [
+      1280,
+      1024
+    ]
+  },
+  "service-smm": {
+    "card": [
+      800,
+      446
+    ],
+    "hero": [
+      1920,
+      1071
+    ]
+  },
+  "service-smm-cabin": {
+    "hero": [
+      1920,
+      1173
+    ]
+  },
+  "service-telegram-night": {
+    "card": [
+      800,
+      533
+    ],
+    "hero": [
+      1280,
+      853
+    ]
+  },
+  "service-webdev": {
+    "card": [
+      800,
+      446
+    ],
+    "hero": [
+      1920,
+      1071
+    ]
+  },
+  "why-earthnight": {
+    "photo": [
+      900,
+      502
+    ]
+  }
+}

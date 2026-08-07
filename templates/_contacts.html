@@ -1,0 +1,62 @@
+<section class="cta-contact" id="contacts" aria-labelledby="contacts-title">
+  <div class="contact-bg" aria-hidden="true">{{& contactPicture }}</div>
+  <div class="section-inner">
+    <div class="contact-panel">
+      <div class="contact-info">
+        <span class="section-label">// Центр связи</span>
+        <h2 id="contacts-title">{{ ctaTitle }}</h2>
+        <p>Оставьте заявку — за 24 часа подготовим экспресс-аудит текущих рекламных каналов и точки роста. Аудит бесплатный и остаётся у вас, даже если мы не начнём работать.</p>
+
+        <div class="contact-detail">
+          <span class="contact-detail-k">Телефон</span>
+          <a href="{{ phoneHref }}" class="contact-detail-v">{{ site.phoneDisplay }}</a>
+        </div>
+        <div class="contact-detail">
+          <span class="contact-detail-k">Telegram</span>
+          <a href="{{ site.telegram }}" class="contact-detail-v" target="_blank" rel="noopener">{{ site.telegramHandle }}</a>
+        </div>
+        <div class="contact-detail">
+          <span class="contact-detail-k">Почта</span>
+          <a href="{{ emailHref }}" class="contact-detail-v">{{ site.email }}</a>
+        </div>
+        <div class="contact-detail">
+          <span class="contact-detail-k">Локация</span>
+          <span class="contact-detail-v">{{ site.city }}, {{ site.country }}</span>
+        </div>
+
+        <a href="{{ site.telegram }}" class="btn btn-ghost contact-tg" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false"><path fill="currentColor" d="M21 4L2.5 11.4c-1.2.5-1.2 1.2-.2 1.5l4.8 1.5 1.8 5.6c.2.6.4.8.9.8.4 0 .6-.2.9-.5l2.1-2 4.4 3.2c.8.5 1.4.2 1.6-.7l3-14c.3-1.2-.4-1.7-1.4-1.3zM7.9 13.7l9-5.6c.4-.3.8-.1.5.2l-7.6 6.9-.3 3.2-1.6-4.7z"/></svg>
+          Написать в Telegram
+        </a>
+      </div>
+
+      <form class="contact-form" id="contactForm" novalidate>
+        <div class="form-row">
+          <label for="field-name">Имя</label>
+          <input type="text" id="field-name" name="name" autocomplete="name"
+                 placeholder="Как к вам обращаться" required
+                 aria-describedby="err-name">
+          <span class="field-error" id="err-name" hidden></span>
+        </div>
+        <div class="form-row">
+          <label for="field-contact">Телефон или Email</label>
+          <input type="text" id="field-contact" name="contact" autocomplete="tel"
+                 inputmode="tel" placeholder="+998 __ ___-__-__" required
+                 aria-describedby="err-contact">
+          <span class="field-error" id="err-contact" hidden></span>
+        </div>
+        <div class="form-row">
+          <label for="field-message">Сообщение <span class="label-optional">— необязательно</span></label>
+          <textarea id="field-message" name="message" rows="4"
+                    placeholder="Расскажите коротко о задаче"></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary btn-block">
+          <span class="btn-text">Отправить заявку</span>
+        </button>
+        <p class="form-note" id="formNote" role="status">
+          Нажимая кнопку, вы соглашаетесь с <a href="privacy.html">политикой конфиденциальности</a>.
+        </p>
+      </form>
+    </div>
+  </div>
+</section>

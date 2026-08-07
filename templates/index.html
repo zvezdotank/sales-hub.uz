@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+{{> _head }}
+</head>
+<body>
+
+{{> _header }}
+
+<main id="main">
+
+  <section class="hero" id="hero" aria-labelledby="hero-title">
+    <div class="hero-photo" aria-hidden="true">{{& heroPicture }}</div>
+    <div class="hero-planet" aria-hidden="true"></div>
+    <div class="hero-grid" aria-hidden="true"></div>
+    <div class="hero-terrain" aria-hidden="true"></div>
+
+    <div class="hero-hud">
+
+      <nav class="hud-panel hud-side hud-side--left" aria-label="Быстрый переход к услугам">
+        {{# services }}<a href="{{ url }}" class="hud-side-item">
+          {{& iconSvgSm }}
+          <span>{{ nav }}</span>
+        </a>
+        {{/ services }}
+      </nav>
+
+      <div class="hud-center">
+        <p class="mission-tag">
+          <span class="mission-dot" aria-hidden="true"></span>
+          MISSION&nbsp;01 · ЦИФРОВОЙ РОСТ
+        </p>
+
+        <h1 class="hero-title" id="hero-title">Выводим ваш бизнес<br> на орбиту роста</h1>
+        <p class="hero-subtitle">Агентство интернет-рекламы полного цикла — контекст, SEO, SMM и Telegram в одной команде управления. Строим предсказуемый поток клиентов, а не разовые запуски.</p>
+
+        <div class="hero-ctas">
+          <a href="#contacts" class="btn btn-primary">Запросить бесплатный аудит</a>
+          <a href="#process" class="btn btn-ghost">
+            <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false"><path fill="currentColor" d="M8 5v14l11-7z"/></svg>
+            Как мы работаем
+          </a>
+        </div>
+
+        <div class="hud-panel info-card">
+          <div class="info-card-head">
+            <div>
+              <p class="info-card-title">SALES HUB</p>
+              <p class="info-card-sub">Средние показатели по клиентам</p>
+            </div>
+            <span class="info-card-badge">ONLINE</span>
+          </div>
+
+          <ul class="hero-stats">
+            {{# heroStats }}<li class="stat-row" data-value="{{ value }}">
+              <span class="stat-label"><i class="stat-ico stat-ico--{{ tone }}" aria-hidden="true"></i>{{ label }}</span>
+              <span class="stat-bar" aria-hidden="true"><span class="stat-fill"></span></span>
+              <span class="stat-pct">{{ value }}%</span>
+            </li>
+            {{/ heroStats }}
+          </ul>
+
+          <p class="exterior-status">
+            <span class="status-dot" aria-hidden="true"></span>
+            КАМПАНИИ · Активны
+          </p>
+        </div>
+      </div>
+
+      <aside class="hud-panel hud-side hud-side--right" aria-label="Маршрут запуска">
+        <div class="minimap">
+          <div class="minimap-head">
+            <div>
+              <p class="minimap-title">МАРШРУТ ЗАПУСКА</p>
+              <p class="minimap-sub">Путь клиента к результату</p>
+            </div>
+            <svg viewBox="0 0 24 24" width="14" height="14" class="expand-ico" aria-hidden="true" focusable="false"><path fill="currentColor" d="M4 4h6V2H2v8h2zm16 0v6h2V2h-8v2zM4 20v-6H2v8h8v-2zm16 0h-6v2h8v-8h-2z"/></svg>
+          </div>
+          <svg class="minimap-route" viewBox="0 0 220 110" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+            <defs>
+              <linearGradient id="routeGrad" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0" stop-color="#ffb547"/>
+                <stop offset="1" stop-color="#ff7a3d"/>
+              </linearGradient>
+            </defs>
+            <path d="M20 85 C 60 85, 55 40, 95 40 S 150 20, 165 20 S 195 45, 200 25" fill="none" stroke="url(#routeGrad)" stroke-width="2" stroke-dasharray="4 5"/>
+            <circle cx="20" cy="85" r="4" fill="#ffb547"/>
+            <circle cx="95" cy="40" r="3" fill="#8fb6c9"/>
+            <circle cx="165" cy="20" r="3" fill="#8fb6c9"/>
+            <circle cx="200" cy="25" r="4" fill="#ff7a3d"/>
+          </svg>
+          <a href="#process" class="minimap-btn">Смотреть процесс</a>
+        </div>
+
+        <div class="orient-dial" aria-hidden="true">
+          <svg viewBox="0 0 100 100" class="dial-ring" focusable="false">
+            <circle cx="50" cy="50" r="46" fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="1"/>
+            <circle cx="50" cy="50" r="38" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+          </svg>
+          <p class="dial-label">ORBIT<br>VIEW</p>
+          <span class="dial-zoom">1x</span>
+        </div>
+      </aside>
+    </div>
+
+    <ul class="hero-bottom-bar">
+      {{# heroBar }}<li class="bar-item"><span class="bar-k">{{ k }}</span><span class="bar-v">{{ v }}</span></li>
+      {{/ heroBar }}
+    </ul>
+  </section>
+
+  <section class="services" id="services" aria-labelledby="services-title">
+    <div class="section-inner">
+      <div class="section-head">
+        <span class="section-label">// 01 · Системы агентства</span>
+        <h2 id="services-title">Восемь модулей — один центр управления</h2>
+        <p>Не разрозненные подрядчики, а слаженный экипаж: трафик, контент, доступы и аналитика работают синхронно на общий результат.</p>
+      </div>
+
+      <div class="services-grid">
+        {{# services }}<a href="{{ url }}" class="service-card">
+          <div class="service-card-photo">
+            {{& cardPicture }}
+            <span class="service-tag">SYSTEM · ONLINE</span>
+          </div>
+          <div class="service-card-body">
+            <span class="service-ico" aria-hidden="true">{{& iconSvg }}</span>
+            <h3>{{ title }}</h3>
+            <p>{{ lead }}</p>
+            <ul class="service-list">
+              {{# bullets }}<li>{{ . }}</li>
+              {{/ bullets }}
+            </ul>
+            <span class="service-more">Подробнее об услуге
+              <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true" focusable="false"><path fill="currentColor" d="M8 5v14l11-7z"/></svg>
+            </span>
+          </div>
+        </a>
+        {{/ services }}
+      </div>
+    </div>
+  </section>
+
+  <section class="clients" id="clients" aria-labelledby="clients-title">
+    <div class="section-inner">
+      <div class="section-head">
+        <span class="section-label">// 02 · Бортовой журнал</span>
+        <h2 id="clients-title">{{ clients.title }}</h2>
+        <p>Брендам с длинным циклом сделки и строгими требованиями к отчётности. Ниже — компании, для которых мы вели рекламные проекты.</p>
+      </div>
+
+      <ul class="client-wall">
+        {{# clientList }}<li class="client-item">
+          <span class="client-mark-wrap" aria-hidden="true">{{& markSvg }}</span>
+          <span class="client-name">{{ name }}</span>
+          <span class="client-sector">{{ sector }}</span>
+        </li>
+        {{/ clientList }}
+      </ul>
+    </div>
+  </section>
+
+  <section class="process" id="process" aria-labelledby="process-title">
+    <div class="section-inner">
+      <div class="section-head">
+        <span class="section-label">// 03 · Траектория запуска</span>
+        <h2 id="process-title">Маршрут от аудита до результата</h2>
+        <p>Прозрачный процесс без «чёрных ящиков» — на каждом этапе вы видите, что происходит с вашим бюджетом.</p>
+      </div>
+
+      <div class="process-banner">
+        {{& processPicture }}
+        <div class="process-banner-caption">
+          <span class="process-banner-k">НА КУРСЕ</span>
+          <span class="process-banner-v">Каждая кампания — по выверенному маршруту, шаг за шагом</span>
+        </div>
+      </div>
+
+      <div class="route-track">
+        <svg class="route-line" viewBox="0 0 1000 60" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+          <defs>
+            <linearGradient id="trackGrad" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0" stop-color="#ffb547"/>
+              <stop offset="1" stop-color="#ff7a3d"/>
+            </linearGradient>
+          </defs>
+          <path d="M40 30 H960" fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="2"/>
+          <path class="route-line-fill" d="M40 30 H960" fill="none" stroke="url(#trackGrad)" stroke-width="2" stroke-dasharray="6 8"/>
+        </svg>
+
+        <ol class="route-steps">
+          {{# process }}<li class="route-step">
+            <span class="route-node{{? last }} route-node--end{{/ last }}">{{ index2 }}</span>
+            <h3>{{ h }}</h3>
+            <p>{{ p }}</p>
+          </li>
+          {{/ process }}
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <section class="why" id="why" aria-labelledby="why-title">
+    <div class="section-inner why-inner">
+      <div class="why-text">
+        <span class="section-label">// 04 · Телеметрия результатов</span>
+        <h2 id="why-title">Почему бизнесы выбирают Sales&nbsp;Hub</h2>
+        <p>Мы отвечаем за цифры, а не за «процесс ради процесса». Каждая кампания привязана к бизнес-показателям клиента.</p>
+        <ul class="why-list">
+          {{# whyList }}<li><span aria-hidden="true">{{ index2 }}</span>{{ . }}</li>
+          {{/ whyList }}
+        </ul>
+      </div>
+
+      <div class="why-photo">{{& whyPicture }}</div>
+
+      <ul class="why-stats">
+        {{# resultStats }}<li class="why-stat-card">
+          <span class="why-stat-num" data-count="{{ count }}" data-suffix="{{ suffix }}"{{? divide }} data-divide="{{ divide }}"{{/ divide }}>0</span>
+          <span class="why-stat-label">{{ label }}</span>
+        </li>
+        {{/ resultStats }}
+      </ul>
+    </div>
+  </section>
+
+  <section class="faq" id="faq" aria-labelledby="faq-title">
+    <div class="section-inner">
+      <div class="section-head">
+        <span class="section-label">// 05 · Связь с экипажем</span>
+        <h2 id="faq-title">Частые вопросы</h2>
+        <p>То, что спрашивают на первом созвоне. Если вашего вопроса здесь нет — напишите в Telegram, ответим без обиняков.</p>
+      </div>
+
+      <div class="faq-list">
+        {{# faq }}<details class="faq-item"{{? first }} open{{/ first }}>
+          <summary>
+            <span class="faq-q">{{ q }}</span>
+            <span class="faq-marker" aria-hidden="true"></span>
+          </summary>
+          <div class="faq-a"><p>{{ a }}</p></div>
+        </details>
+        {{/ faq }}
+      </div>
+    </div>
+  </section>
+
+{{> _contacts }}
+
+</main>
+
+{{> _footer }}
+</body>
+</html>

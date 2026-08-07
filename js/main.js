@@ -2,6 +2,15 @@
 // Sales Hub — interactions
 // ===========================
 
+// Куда уходят заявки. Пока пусто — форма работает в режиме заглушки и честно
+// предлагает написать в Telegram. Подставьте сюда URL обработчика
+// (Formspree, Web3Forms, свой бэкенд или Telegram-бот) — остальной код готов.
+const FORM_ENDPOINT = '';
+
+const TELEGRAM_URL = 'https://t.me/Saleshubuzb';
+
+const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
 document.addEventListener('DOMContentLoaded', () => {
   initStars();
   initHeaderScroll();
@@ -12,14 +21,17 @@ document.addEventListener('DOMContentLoaded', () => {
   initCounters();
   initScrollTop();
   initContactForm();
-  document.getElementById('year').textContent = new Date().getFullYear();
 });
 
-// Starfield
+// --- Звёздный фон -----------------------------------------------------------
+
 function initStars() {
   const container = document.getElementById('stars');
-  const count = window.innerWidth < 700 ? 60 : 130;
+  if (!container || prefersReducedMotion) return;
+
+  const count = window.innerWidth < 700 ? 50 : 120;
   const frag = document.createDocumentFragment();
+
   for (let i = 0; i < count; i++) {
     const star = document.createElement('span');
     const size = Math.random() * 1.6 + 0.6;
@@ -27,153 +39,251 @@ function initStars() {
     star.style.left = Math.random() * 100 + '%';
     star.style.width = size + 'px';
     star.style.height = size + 'px';
-    star.style.animationDelay = (Math.random() * 4) + 's';
-    star.style.animationDuration = (3 + Math.random() * 3) + 's';
+    star.style.animationDelay = Math.random() * 4 + 's';
+    star.style.animationDuration = 3 + Math.random() * 3 + 's';
     frag.appendChild(star);
   }
   container.appendChild(frag);
 }
 
-// Header background on scroll
+// --- Шапка ------------------------------------------------------------------
+
 function initHeaderScroll() {
   const header = document.getElementById('siteHeader');
-  const toggle = () => {
-    header.classList.toggle('scrolled', window.scrollY > 20);
-  };
+  if (!header) return;
+
+  const toggle = () => header.classList.toggle('scrolled', window.scrollY > 20);
   toggle();
   window.addEventListener('scroll', toggle, { passive: true });
 }
 
-// Mobile nav
 function initMobileNav() {
   const toggle = document.getElementById('navToggle');
   const nav = document.getElementById('mainNav');
+  if (!toggle || !nav) return;
+
+  const setOpen = (open) => {
+    toggle.setAttribute('aria-expanded', String(open));
+    toggle.setAttribute('aria-label', open ? 'Закрыть меню' : 'Открыть меню');
+    nav.classList.toggle('open', open);
+  };
+
   toggle.addEventListener('click', () => {
-    toggle.classList.toggle('open');
-    nav.classList.toggle('open');
+    setOpen(toggle.getAttribute('aria-expanded') !== 'true');
   });
-  nav.querySelectorAll('a').forEach(link => {
-    link.addEventListener('click', () => {
-      toggle.classList.remove('open');
-      nav.classList.remove('open');
-    });
+
+  nav.querySelectorAll('a').forEach((link) => {
+    link.addEventListener('click', () => setOpen(false));
+  });
+
+  // Закрытие по Escape и по клику вне меню — иначе меню оставалось висеть.
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && toggle.getAttribute('aria-expanded') === 'true') {
+      setOpen(false);
+      toggle.focus();
+    }
+  });
+
+  document.addEventListener('click', (e) => {
+    if (toggle.getAttribute('aria-expanded') !== 'true') return;
+    if (!nav.contains(e.target) && !toggle.contains(e.target)) setOpen(false);
   });
 }
 
-// Reveal-on-scroll for sections
+// --- Появление блоков при скролле -------------------------------------------
+
+function observeOnce(elements, onEnter, threshold) {
+  if (!('IntersectionObserver' in window)) {
+    elements.forEach(onEnter);
+    return;
+  }
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (!entry.isIntersecting) return;
+      onEnter(entry.target);
+      observer.unobserve(entry.target);
+    });
+  }, { threshold });
+  elements.forEach((el) => observer.observe(el));
+}
+
 function initReveal() {
-  const targets = document.querySelectorAll(
-    '.service-card, .route-step, .why-stat-card, .contact-panel, .section-head'
-  );
-  targets.forEach(el => el.classList.add('reveal'));
+  const targets = [...document.querySelectorAll(
+    '.service-card, .route-step, .why-stat-card, .client-item, .faq-item, .contact-panel, .section-head'
+  )];
+  if (prefersReducedMotion) return;
 
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('in-view');
-        observer.unobserve(entry.target);
-      }
-    });
-  }, { threshold: 0.15 });
-
-  targets.forEach(el => observer.observe(el));
+  targets.forEach((el) => el.classList.add('reveal'));
+  observeOnce(targets, (el) => el.classList.add('in-view'), 0.15);
 }
 
-// Animate hero stat bars once visible
 function initStatBars() {
-  const rows = document.querySelectorAll('.stat-row');
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        const row = entry.target;
-        const value = row.getAttribute('data-value');
-        const fill = row.querySelector('.stat-fill');
-        requestAnimationFrame(() => {
-          fill.style.width = value + '%';
-        });
-        observer.unobserve(row);
-      }
-    });
-  }, { threshold: 0.3 });
-  rows.forEach(row => observer.observe(row));
+  const rows = [...document.querySelectorAll('.stat-row')];
+  observeOnce(rows, (row) => {
+    const fill = row.querySelector('.stat-fill');
+    if (fill) requestAnimationFrame(() => { fill.style.width = row.dataset.value + '%'; });
+  }, 0.3);
 }
 
-// Draw the process route line when in view
 function initRouteLine() {
-  const line = document.querySelector('.route-line-fill');
-  if (!line) return;
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('in-view');
-        observer.unobserve(entry.target);
-      }
-    });
-  }, { threshold: 0.4 });
-  observer.observe(line);
+  const lines = [...document.querySelectorAll('.route-line-fill')];
+  observeOnce(lines, (el) => el.classList.add('in-view'), 0.4);
 }
 
-// Count-up numbers in "why" section
+// --- Счётчики ---------------------------------------------------------------
+
 function initCounters() {
-  const nums = document.querySelectorAll('.why-stat-num');
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        animateCount(entry.target);
-        observer.unobserve(entry.target);
-      }
-    });
-  }, { threshold: 0.5 });
-  nums.forEach(n => observer.observe(n));
+  const nums = [...document.querySelectorAll('.why-stat-num')];
+  observeOnce(nums, animateCount, 0.5);
 }
 
 function animateCount(el) {
-  const target = parseInt(el.getAttribute('data-count'), 10);
-  const suffix = el.getAttribute('data-suffix') || '';
-  const isDecimalX = suffix === 'x';
+  const target = parseInt(el.dataset.count, 10);
+  const suffix = el.dataset.suffix || '';
+  const divide = parseInt(el.dataset.divide, 10) || 1;
+  const decimals = divide > 1 ? 1 : 0;
+
+  const format = (v) => (v / divide).toFixed(decimals) + suffix;
+
+  if (prefersReducedMotion || Number.isNaN(target)) {
+    el.textContent = format(target);
+    return;
+  }
+
   const duration = 1400;
   const start = performance.now();
 
   function tick(now) {
     const progress = Math.min((now - start) / duration, 1);
     const eased = 1 - Math.pow(1 - progress, 3);
-    let value = target * eased;
-    if (isDecimalX) {
-      el.textContent = (value / 10).toFixed(1) + 'x';
-    } else {
-      el.textContent = Math.round(value) + suffix;
-    }
+    el.textContent = format(target * eased);
     if (progress < 1) requestAnimationFrame(tick);
   }
   requestAnimationFrame(tick);
 }
 
-// Scroll-to-top button
+// --- Кнопка «наверх» --------------------------------------------------------
+
 function initScrollTop() {
   const btn = document.getElementById('scrollTop');
-  window.addEventListener('scroll', () => {
-    btn.classList.toggle('visible', window.scrollY > 600);
-  }, { passive: true });
+  if (!btn) return;
+
+  btn.hidden = false;
+  const toggle = () => btn.classList.toggle('visible', window.scrollY > 600);
+  toggle();
+  window.addEventListener('scroll', toggle, { passive: true });
+
   btn.addEventListener('click', () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo({ top: 0, behavior: prefersReducedMotion ? 'auto' : 'smooth' });
   });
 }
 
-// Contact form (client-side only placeholder)
+// --- Форма заявки -----------------------------------------------------------
+
 function initContactForm() {
   const form = document.getElementById('contactForm');
   const note = document.getElementById('formNote');
-  if (!form) return;
+  if (!form || !note) return;
 
-  form.addEventListener('submit', (e) => {
+  const defaultNote = note.innerHTML;
+  const button = form.querySelector('button[type="submit"]');
+  const buttonText = button.querySelector('.btn-text');
+
+  const setError = (input, message) => {
+    const box = document.getElementById('err-' + input.name);
+    if (!box) return;
+    box.textContent = message || '';
+    box.hidden = !message;
+    input.setAttribute('aria-invalid', message ? 'true' : 'false');
+  };
+
+  const validate = () => {
+    let firstInvalid = null;
+
+    const name = form.elements.name;
+    const contact = form.elements.contact;
+
+    if (!name.value.trim()) {
+      setError(name, 'Укажите, как к вам обращаться');
+      firstInvalid = firstInvalid || name;
+    } else {
+      setError(name, '');
+    }
+
+    const value = contact.value.trim();
+    const isPhone = /^\+?[\d\s()-]{7,}$/.test(value);
+    const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(value);
+
+    if (!value) {
+      setError(contact, 'Оставьте телефон или email для связи');
+      firstInvalid = firstInvalid || contact;
+    } else if (!isPhone && !isEmail) {
+      setError(contact, 'Похоже на опечатку — проверьте номер или email');
+      firstInvalid = firstInvalid || contact;
+    } else {
+      setError(contact, '');
+    }
+
+    return firstInvalid;
+  };
+
+  form.querySelectorAll('input').forEach((input) => {
+    input.addEventListener('input', () => {
+      if (input.getAttribute('aria-invalid') === 'true') validate();
+    });
+  });
+
+  form.addEventListener('submit', async (e) => {
     e.preventDefault();
-    const submitBtn = form.querySelector('button[type="submit"] .btn-text');
-    submitBtn.textContent = 'Отправлено ✓';
-    note.textContent = 'Заявка принята. Мы свяжемся с вами в течение рабочего дня.';
-    note.classList.add('success');
-    form.reset();
-    setTimeout(() => {
-      submitBtn.textContent = 'Отправить заявку';
-    }, 3000);
+
+    const invalid = validate();
+    if (invalid) {
+      invalid.focus();
+      note.className = 'form-note error';
+      note.textContent = 'Проверьте отмеченные поля.';
+      return;
+    }
+
+    // Обработчик ещё не подключён: не делаем вид, что заявка ушла.
+    if (!FORM_ENDPOINT) {
+      note.className = 'form-note error';
+      note.innerHTML =
+        'Отправка формы пока не подключена. Напишите нам в ' +
+        '<a href="' + TELEGRAM_URL + '" target="_blank" rel="noopener">Telegram</a> — ответим сразу.';
+      return;
+    }
+
+    button.disabled = true;
+    buttonText.textContent = 'Отправляем…';
+    note.className = 'form-note';
+    note.textContent = 'Отправляем заявку…';
+
+    try {
+      const response = await fetch(FORM_ENDPOINT, {
+        method: 'POST',
+        headers: { 'Accept': 'application/json' },
+        body: new FormData(form),
+      });
+      if (!response.ok) throw new Error('HTTP ' + response.status);
+
+      form.reset();
+      buttonText.textContent = 'Отправлено ✓';
+      note.className = 'form-note success';
+      note.textContent = 'Заявка принята. Свяжемся с вами в течение рабочего дня.';
+    } catch (error) {
+      buttonText.textContent = 'Отправить заявку';
+      note.className = 'form-note error';
+      note.innerHTML =
+        'Не удалось отправить заявку. Напишите в ' +
+        '<a href="' + TELEGRAM_URL + '" target="_blank" rel="noopener">Telegram</a> ' +
+        'или позвоните нам.';
+    } finally {
+      button.disabled = false;
+      setTimeout(() => {
+        buttonText.textContent = 'Отправить заявку';
+        note.className = 'form-note';
+        note.innerHTML = defaultNote;
+      }, 6000);
+    }
   });
 }

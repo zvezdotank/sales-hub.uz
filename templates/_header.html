@@ -1,0 +1,37 @@
+<a href="#main" class="skip-link">Перейти к содержимому</a>
+
+<div class="stars-bg" id="stars" aria-hidden="true"></div>
+<div class="scan-overlay" aria-hidden="true"></div>
+
+<header class="site-header" id="siteHeader">
+  <div class="header-inner">
+    <a href="{{ homeHref }}" class="logo" aria-label="{{ site.name }} — на главную">
+      <span class="logo-mark" aria-hidden="true">
+        <svg viewBox="0 0 40 40" width="28" height="28" focusable="false"><circle cx="20" cy="20" r="17" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="20" cy="20" r="6" fill="currentColor"/><circle cx="20" cy="20" r="12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-dasharray="2 5"/></svg>
+      </span>
+      <span class="logo-text">SALES<em>HUB</em></span>
+    </a>
+
+    <nav class="main-nav" id="mainNav" aria-label="Основная навигация">
+      <a href="{{ navPrefix }}#services" class="nav-link"><span class="nav-index" aria-hidden="true">01</span>Услуги</a>
+      <a href="{{ navPrefix }}#process" class="nav-link"><span class="nav-index" aria-hidden="true">02</span>Процесс</a>
+      <a href="{{ navPrefix }}#clients" class="nav-link"><span class="nav-index" aria-hidden="true">03</span>Клиенты</a>
+      <a href="{{ navPrefix }}#faq" class="nav-link"><span class="nav-index" aria-hidden="true">04</span>Вопросы</a>
+      <a href="{{ contactsHref }}" class="nav-link"><span class="nav-index" aria-hidden="true">05</span>Контакты</a>
+    </nav>
+
+    <div class="header-actions">
+      <a href="{{ site.telegram }}" class="header-icon-btn" target="_blank" rel="noopener" aria-label="Написать в Telegram — {{ site.telegramHandle }}">
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false"><path fill="currentColor" d="M21 4L2.5 11.4c-1.2.5-1.2 1.2-.2 1.5l4.8 1.5 1.8 5.6c.2.6.4.8.9.8.4 0 .6-.2.9-.5l2.1-2 4.4 3.2c.8.5 1.4.2 1.6-.7l3-14c.3-1.2-.4-1.7-1.4-1.3zM7.9 13.7l9-5.6c.4-.3.8-.1.5.2l-7.6 6.9-.3 3.2-1.6-4.7z"/></svg>
+      </a>
+      <a href="{{ phoneHref }}" class="header-phone">
+        <span class="dot-badge" aria-hidden="true"></span>
+        {{ site.phoneDisplay }}
+      </a>
+      <a href="{{ contactsHref }}" class="btn btn-primary btn-sm">Обсудить проект</a>
+      <button class="nav-toggle" id="navToggle" aria-label="Открыть меню" aria-expanded="false" aria-controls="mainNav">
+        <span aria-hidden="true"></span><span aria-hidden="true"></span><span aria-hidden="true"></span>
+      </button>
+    </div>
+  </div>
+</header>
