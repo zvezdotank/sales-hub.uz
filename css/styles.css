@@ -1678,26 +1678,96 @@ a.contact-detail-v:hover { color: var(--accent); }
 .scroll-top.visible { opacity: 1; pointer-events: auto; transform: translateY(0); }
 .scroll-top:hover { border-color: var(--accent); }
 
-/* Липкая кнопка связи — только на мобильных, где шапка сжимается. */
-.mobile-cta {
+/* Панель связи — только на мобильных, где шапка сжимается до логотипа.
+   Оформлена как приборный блок: тёмное стекло, угловые засечки прицела
+   и строка состояния с мигающим индикатором. */
+.mobile-dock {
   display: none;
   position: fixed;
-  left: 16px;
-  right: 16px;
-  bottom: 16px;
+  left: 12px;
+  right: 12px;
+  bottom: 12px;
   z-index: 46;
+  flex-direction: column;
+  gap: 8px;
+  padding: 9px 10px 10px;
+  border-radius: 14px;
+  background: rgba(8, 12, 20, 0.82);
+  border: 1px solid var(--border-strong);
+  backdrop-filter: blur(16px);
+  box-shadow: 0 14px 40px -10px rgba(0, 0, 0, 0.75), 0 0 0 1px rgba(255, 181, 71, 0.06);
+}
+
+/* Угловые засечки — четыре уголка рамки, как в прицеле HUD. */
+.mobile-dock::before,
+.mobile-dock::after {
+  content: "";
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  border: 1px solid var(--accent);
+  opacity: 0.55;
+  pointer-events: none;
+}
+.mobile-dock::before {
+  top: -1px; left: -1px;
+  border-right: none; border-bottom: none;
+  border-top-left-radius: 14px;
+}
+.mobile-dock::after {
+  bottom: -1px; right: -1px;
+  border-left: none; border-top: none;
+  border-bottom-right-radius: 14px;
+}
+
+.dock-status {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  letter-spacing: 0.12em;
+  color: var(--text-faint);
+}
+.dock-status-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--success);
+  box-shadow: 0 0 6px var(--success);
+  animation: led-dot 5.4s linear infinite -1.8s;
+}
+
+.dock-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+
+.dock-btn {
+  display: flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
-  padding: 14px;
-  border-radius: 12px;
-  background: linear-gradient(135deg, var(--accent), var(--accent-2));
-  color: #04121a;
+  padding: 13px 10px;
+  border-radius: 10px;
   font-family: var(--font-mono);
   font-size: 13px;
-  font-weight: 600;
-  box-shadow: 0 8px 28px -8px rgba(255, 181, 71, 0.5);
+  letter-spacing: 0.02em;
+  transition: filter 0.2s ease, background 0.2s ease, border-color 0.2s ease;
 }
+/* Звонок — основное действие, поэтому заполненная кнопка. */
+.dock-btn--call {
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  color: #04121a;
+  font-weight: 600;
+  box-shadow: 0 6px 20px -6px rgba(255, 181, 71, 0.55);
+}
+.dock-btn--call:active { filter: brightness(0.94); }
+/* Telegram — контур с тем же акцентом, чтобы не спорить за внимание. */
+.dock-btn--tg {
+  color: var(--accent);
+  border: 1px solid rgba(255, 181, 71, 0.4);
+  background: rgba(255, 181, 71, 0.07);
+}
+.dock-btn--tg:active { background: rgba(255, 181, 71, 0.14); }
 
 /* ---------- появление при скролле ---------- */
 
@@ -1746,10 +1816,10 @@ a.contact-detail-v:hover { color: var(--accent); }
   .bar-item { flex-shrink: 0; }
   .hud-side--right { flex-direction: column; }
   .orient-dial { display: none; }
-  .mobile-cta { display: flex; }
-  .scroll-top { bottom: 82px; }
+  .mobile-dock { display: flex; }
+  .scroll-top { bottom: 108px; }
   section:not(.hero) { padding: 72px 0; }
-  .site-footer { padding-bottom: 96px; }
+  .site-footer { padding-bottom: 124px; }
 }
 
 @media (max-width: 560px) {
