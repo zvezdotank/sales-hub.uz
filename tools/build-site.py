@@ -355,12 +355,9 @@ def main() -> int:
     index_ctx.update(
         {
             "pageTitle": f"{s['name']} — {s['tagline'].lower()} в {s['city']}е",
-            "metaTitle": f"{s['name']} — {s['tagline'].lower()} полного цикла в {s['city']}е",
-            "metaDescription": (
-                f"{s['name']} — {s['tagline'].lower()} полного цикла в {s['city']}е: контекстная реклама, "
-                "SEO, SMM, Telegram Ads, аналитика и разработка сайтов. Работаем за результат, "
-                "отчётность еженедельно."
-            ),
+            "metaTitle": data["metaTitle"],
+            "metaDescription": data["metaDescription"],
+            "hero": data["hero"],
             "canonical": s["origin"] + "/",
             "ogImage": f"{s['origin']}/assets/og/og-default.jpg",
             "isIndex": True,
@@ -429,6 +426,7 @@ def main() -> int:
                 "isCpa": sv.get("custom") == "cpa",
                 "structuredData": "\n".join(
                     [jsonld(service_page_ld(s, sv)), jsonld(breadcrumb_ld(s, sv))]
+                    + ([jsonld(faq_ld(sv["faq"]))] if sv.get("faq") else [])
                 ),
             }
         )

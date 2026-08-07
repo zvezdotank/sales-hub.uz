@@ -31,8 +31,11 @@
           MISSION&nbsp;01 · ЦИФРОВОЙ РОСТ
         </p>
 
-        <h1 class="hero-title" id="hero-title">Выводим ваш бизнес<br> на орбиту роста</h1>
-        <p class="hero-subtitle">Агентство интернет-рекламы полного цикла — контекст, SEO, SMM и Telegram в одной команде управления. Строим предсказуемый поток клиентов, а не разовые запуски.</p>
+        <h1 class="hero-title" id="hero-title">
+          <span class="hero-eyebrow">{{ hero.eyebrow }}</span>
+          <span class="hero-headline">{{& hero.headline }}</span>
+        </h1>
+        <p class="hero-subtitle">{{ hero.subtitle }}</p>
 
         <div class="hero-ctas">
           <a href="#contacts" class="btn btn-primary">Запросить бесплатный аудит</a>

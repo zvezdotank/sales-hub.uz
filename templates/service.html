@@ -134,6 +134,18 @@
   </section>
 {{/ isCpa }}
 
+{{? intro }}
+  <section class="service-intro" aria-labelledby="intro-title">
+    <div class="section-inner">
+      <div class="intro-body">
+        <h2 id="intro-title">{{ introTitle }}</h2>
+        {{# intro }}<p>{{ . }}</p>
+        {{/ intro }}
+      </div>
+    </div>
+  </section>
+{{/ intro }}
+
 {{^ isCpa }}
   <section class="services" id="features" aria-labelledby="features-title">
     <div class="section-inner">
@@ -185,6 +197,29 @@
     </div>
   </section>
 {{/ isCpa }}
+
+{{? faq }}
+  <section class="faq" id="faq" aria-labelledby="faq-title">
+    <div class="section-inner">
+      <div class="section-head">
+        <span class="section-label">// Частые вопросы</span>
+        <h2 id="faq-title">Что спрашивают об услуге</h2>
+        <p>Если вашего вопроса здесь нет — напишите в Telegram, ответим без обиняков.</p>
+      </div>
+
+      <div class="faq-list">
+        {{# faq }}<details class="faq-item"{{? first }} open{{/ first }}>
+          <summary>
+            <span class="faq-q">{{ q }}</span>
+            <span class="faq-marker" aria-hidden="true"></span>
+          </summary>
+          <div class="faq-a"><p>{{ a }}</p></div>
+        </details>
+        {{/ faq }}
+      </div>
+    </div>
+  </section>
+{{/ faq }}
 
   <section class="related-services" aria-labelledby="related-title">
     <div class="section-inner">

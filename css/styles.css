@@ -454,13 +454,25 @@ button { font: inherit; color: inherit; }
   50% { opacity: 0.4; transform: scale(0.8); }
 }
 
-.hero-title {
+/* H1 состоит из двух частей: строка с ключевым запросом для поиска и
+   крупный слоган для человека. Обе внутри одного заголовка. */
+.hero-title { margin-bottom: 20px; }
+.hero-eyebrow {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: clamp(13px, 1.5vw, 16px);
+  font-weight: 400;
+  letter-spacing: 0.06em;
+  color: var(--accent);
+  margin-bottom: 12px;
+}
+.hero-headline {
+  display: block;
   font-family: var(--font-body);
   font-weight: 700;
   font-size: clamp(34px, 5vw, 58px);
   line-height: 1.08;
   letter-spacing: -0.01em;
-  margin-bottom: 20px;
 }
 
 .hero-subtitle {
@@ -1000,6 +1012,26 @@ section:not(.hero) {
   margin-bottom: 30px;
 }
 .page-hero-ctas { display: flex; gap: 14px; flex-wrap: wrap; }
+
+/* ---------- вводный текст на странице услуги ---------- */
+
+.service-intro { padding-bottom: 0; }
+.intro-body { max-width: 780px; }
+.intro-body h2 {
+  font-size: clamp(24px, 2.8vw, 32px);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+  margin-bottom: 20px;
+  text-wrap: balance;
+}
+.intro-body p {
+  color: var(--text-dim);
+  font-size: 16px;
+  line-height: 1.7;
+  text-wrap: pretty;
+}
+.intro-body p + p { margin-top: 16px; }
 
 /* ---------- сетка преимуществ ---------- */
 
