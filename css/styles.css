@@ -136,6 +136,43 @@ button { font: inherit; color: inherit; }
   50% { opacity: 0.9; }
 }
 
+/* Свечение индикатора «ONLINE».
+   Ровный свет с редкими короткими просадками и медленным дрейфом яркости —
+   так ведут себя реальные светодиоды. Равномерная синусоида читалась бы
+   как «дыхание» и выглядела бы искусственно. */
+@keyframes led-glow {
+  0%   { opacity: 1;    text-shadow: 0 0 7px rgba(74, 222, 128, 0.45); }
+  7%   { opacity: 0.97; text-shadow: 0 0 6px rgba(74, 222, 128, 0.40); }
+  8%   { opacity: 0.78; text-shadow: 0 0 2px rgba(74, 222, 128, 0.16); }
+  9%   { opacity: 1;    text-shadow: 0 0 8px rgba(74, 222, 128, 0.52); }
+  18%  { opacity: 0.94; text-shadow: 0 0 5px rgba(74, 222, 128, 0.34); }
+  30%  { opacity: 1;    text-shadow: 0 0 7px rgba(74, 222, 128, 0.48); }
+  42%  { opacity: 0.96; text-shadow: 0 0 6px rgba(74, 222, 128, 0.38); }
+  43%  { opacity: 0.72; text-shadow: 0 0 2px rgba(74, 222, 128, 0.12); }
+  44%  { opacity: 0.9;  text-shadow: 0 0 4px rgba(74, 222, 128, 0.28); }
+  45%  { opacity: 1;    text-shadow: 0 0 9px rgba(74, 222, 128, 0.58); }
+  58%  { opacity: 0.98; text-shadow: 0 0 7px rgba(74, 222, 128, 0.44); }
+  70%  { opacity: 0.92; text-shadow: 0 0 5px rgba(74, 222, 128, 0.30); }
+  71%  { opacity: 1;    text-shadow: 0 0 8px rgba(74, 222, 128, 0.50); }
+  84%  { opacity: 0.95; text-shadow: 0 0 6px rgba(74, 222, 128, 0.36); }
+  92%  { opacity: 1;    text-shadow: 0 0 7px rgba(74, 222, 128, 0.46); }
+  100% { opacity: 1;    text-shadow: 0 0 7px rgba(74, 222, 128, 0.45); }
+}
+
+/* Точечный индикатор — тот же ритм, но светится ореолом, а не текстом. */
+@keyframes led-dot {
+  0%   { opacity: 1;    box-shadow: 0 0 8px rgba(74, 222, 128, 0.9); }
+  8%   { opacity: 0.75; box-shadow: 0 0 3px rgba(74, 222, 128, 0.35); }
+  9%   { opacity: 1;    box-shadow: 0 0 10px rgba(74, 222, 128, 1); }
+  18%  { opacity: 0.93; box-shadow: 0 0 6px rgba(74, 222, 128, 0.65); }
+  30%  { opacity: 1;    box-shadow: 0 0 8px rgba(74, 222, 128, 0.9); }
+  43%  { opacity: 0.7;  box-shadow: 0 0 2px rgba(74, 222, 128, 0.3); }
+  45%  { opacity: 1;    box-shadow: 0 0 11px rgba(74, 222, 128, 1); }
+  70%  { opacity: 0.9;  box-shadow: 0 0 5px rgba(74, 222, 128, 0.55); }
+  71%  { opacity: 1;    box-shadow: 0 0 9px rgba(74, 222, 128, 0.95); }
+  100% { opacity: 1;    box-shadow: 0 0 8px rgba(74, 222, 128, 0.9); }
+}
+
 /* ---------- шапка ---------- */
 
 .site-header {
@@ -241,6 +278,7 @@ button { font: inherit; color: inherit; }
   background: var(--success);
   box-shadow: 0 0 6px var(--success);
   flex-shrink: 0;
+  animation: led-dot 10.8s linear infinite -6.7s;
 }
 
 .nav-toggle {
@@ -521,6 +559,7 @@ button { font: inherit; color: inherit; }
   padding: 4px 10px;
   border-radius: 20px;
   white-space: nowrap;
+  animation: led-glow 9.4s linear infinite -2.1s;
 }
 
 .hero-stats { display: flex; flex-direction: column; gap: 12px; }
@@ -589,6 +628,7 @@ button { font: inherit; color: inherit; }
   border-radius: 50%;
   background: var(--success);
   box-shadow: 0 0 8px var(--success);
+  animation: led-dot 8.6s linear infinite -4.3s;
 }
 
 /* правая колонка героя */
@@ -793,7 +833,20 @@ section:not(.hero) {
   font-size: 10px;
   letter-spacing: 0.06em;
   color: var(--success);
+  animation: led-glow 8s linear infinite;
 }
+
+/* Каждая надпись живёт в своей фазе и со своим периодом — синхронное
+   мерцание восьми карточек сразу выдавало бы анимацию. Отрицательная
+   задержка стартует цикл с середины, поэтому при загрузке они уже вразнобой. */
+.services-grid .service-card:nth-child(1) .service-tag { animation-duration: 7.4s;  animation-delay: -0.7s; }
+.services-grid .service-card:nth-child(2) .service-tag { animation-duration: 9.1s;  animation-delay: -3.2s; }
+.services-grid .service-card:nth-child(3) .service-tag { animation-duration: 8.3s;  animation-delay: -5.6s; }
+.services-grid .service-card:nth-child(4) .service-tag { animation-duration: 10.2s; animation-delay: -1.9s; }
+.services-grid .service-card:nth-child(5) .service-tag { animation-duration: 7.9s;  animation-delay: -6.4s; }
+.services-grid .service-card:nth-child(6) .service-tag { animation-duration: 9.6s;  animation-delay: -2.5s; }
+.services-grid .service-card:nth-child(7) .service-tag { animation-duration: 8.7s;  animation-delay: -4.8s; }
+.services-grid .service-card:nth-child(8) .service-tag { animation-duration: 11.1s; animation-delay: -0.3s; }
 .service-card h3 { font-size: 20px; font-weight: 600; margin-bottom: 10px; }
 .service-card > .service-card-body > p {
   color: var(--text-dim);
@@ -1704,6 +1757,8 @@ a.contact-detail-v:hover { color: var(--accent); }
   .stars-bg span { animation: none; opacity: 0.5; }
   .dial-ring { animation: none; }
   .mission-dot { animation: none; }
+  .service-tag, .info-card-badge { animation: none; text-shadow: 0 0 7px rgba(74, 222, 128, 0.45); }
+  .status-dot, .dot-badge { animation: none; }
   .service-card:hover, .client-item:hover, .related-card:hover, .btn-primary:hover {
     transform: none;
   }
