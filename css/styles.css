@@ -1730,6 +1730,8 @@ a.contact-detail-v:hover { color: var(--accent); }
   letter-spacing: 0.12em;
   color: var(--text-faint);
 }
+.dock-status-text { font-variant-numeric: tabular-nums; }
+
 .dock-status-dot {
   width: 5px;
   height: 5px;
@@ -1737,6 +1739,15 @@ a.contact-detail-v:hover { color: var(--accent); }
   background: var(--success);
   box-shadow: 0 0 6px var(--success);
   animation: led-dot 5.4s linear infinite -1.8s;
+}
+
+/* Вне часов приёма индикатор перестаёт мигать и меняет цвет на янтарный —
+   состояние читается ещё до того, как глаз доберётся до цифр. */
+.dock-status.is-closed .dock-status-dot {
+  background: var(--accent);
+  box-shadow: 0 0 6px rgba(255, 181, 71, 0.7);
+  animation: none;
+  opacity: 0.85;
 }
 
 .dock-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }

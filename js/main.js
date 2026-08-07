@@ -21,6 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initCounters();
   initScrollTop();
   initContactForm();
+  initSchedule();
 });
 
 // --- Звёздный фон -----------------------------------------------------------
@@ -176,6 +177,90 @@ function initScrollTop() {
   btn.addEventListener('click', () => {
     window.scrollTo({ top: 0, behavior: prefersReducedMotion ? 'auto' : 'smooth' });
   });
+}
+
+// --- Часы приёма ------------------------------------------------------------
+// Считаем по времени Ташкента, а не по часам устройства: иначе клиент из
+// другого пояса увидел бы, что связь открыта, когда на самом деле уже ночь.
+
+function initSchedule() {
+  const el = document.getElementById('dockStatus');
+  const out = el && el.querySelector('.dock-status-text');
+  if (!out) return;
+
+  const openHour = +el.dataset.open;
+  const closeHour = +el.dataset.close;
+  const tzOffset = +el.dataset.tz;
+  const workdays = el.dataset.workdays.split(',').map(Number);
+
+  // «Сейчас» в часовом поясе агентства, независимо от настроек устройства.
+  const nowThere = () => {
+    const now = new Date();
+    return new Date(now.getTime() + now.getTimezoneOffset() * 60000 + tzOffset * 3600000);
+  };
+
+  const pad = (n) => String(n).padStart(2, '0');
+
+  const format = (ms) => {
+    const total = Math.max(0, Math.floor(ms / 1000));
+    const days = Math.floor(total / 86400);
+    const h = Math.floor((total % 86400) / 3600);
+    const m = Math.floor((total % 3600) / 60);
+    const s = total % 60;
+    return days > 0
+      ? `${days} дн ${pad(h)}:${pad(m)}`
+      : `${h}:${pad(m)}:${pad(s)}`;
+  };
+
+  // Ближайший момент открытия начиная с указанной даты.
+  const nextOpening = (from) => {
+    const d = new Date(from);
+    for (let i = 0; i < 8; i++) {
+      const candidate = new Date(d);
+      candidate.setDate(d.getDate() + i);
+      candidate.setHours(openHour, 0, 0, 0);
+      if (candidate > from && workdays.includes(candidate.getDay())) return candidate;
+    }
+    return null;
+  };
+
+  const tick = () => {
+    const now = nowThere();
+    const isWorkday = workdays.includes(now.getDay());
+    const closing = new Date(now);
+    closing.setHours(closeHour, 0, 0, 0);
+
+    const open = isWorkday && now.getHours() >= openHour && now < closing;
+
+    if (open) {
+      el.classList.remove('is-closed');
+      out.textContent = `КАНАЛ СВЯЗИ · ОТКРЫТ ${format(closing - now)}`;
+    } else {
+      el.classList.add('is-closed');
+      const next = nextOpening(now);
+      out.textContent = next
+        ? `КАНАЛ СВЯЗИ · ЧЕРЕЗ ${format(next - now)}`
+        : 'КАНАЛ СВЯЗИ · НАПИШИТЕ В TELEGRAM';
+    }
+  };
+
+  // Одна секунда — незаметная нагрузка, но в фоновой вкладке таймер
+  // останавливаем, чтобы не будить процессор впустую.
+  let timer = null;
+  const start = () => {
+    if (timer) return;
+    tick();
+    timer = setInterval(tick, 1000);
+  };
+  const stop = () => {
+    clearInterval(timer);
+    timer = null;
+  };
+
+  document.addEventListener('visibilitychange', () => {
+    document.hidden ? stop() : start();
+  });
+  start();
 }
 
 // --- Форма заявки -----------------------------------------------------------

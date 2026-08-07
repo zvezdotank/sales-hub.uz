@@ -40,9 +40,13 @@
 </button>
 
 <nav class="mobile-dock" aria-label="Быстрая связь">
-  <span class="dock-status">
+  <span class="dock-status" id="dockStatus"
+        data-open="{{ schedule.openHour }}"
+        data-close="{{ schedule.closeHour }}"
+        data-tz="{{ schedule.tzOffset }}"
+        data-workdays="{{ workdaysAttr }}">
     <span class="dock-status-dot" aria-hidden="true"></span>
-    КАНАЛ СВЯЗИ · ОТКРЫТ
+    <span class="dock-status-text">КАНАЛ СВЯЗИ · ОТКРЫТ</span>
   </span>
   <div class="dock-actions">
     <a href="{{ phoneHref }}" class="dock-btn dock-btn--call">

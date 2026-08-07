@@ -368,6 +368,8 @@ def main() -> int:
         "year": date.today().year,
         "buildDate": date.today().isoformat(),
         "phoneHref": "tel:" + s["phone"],
+        "schedule": data["schedule"],
+        "workdaysAttr": ",".join(str(d) for d in data["schedule"]["workdays"]),
         "cssVersion": asset_version("css/styles.css"),
         "jsVersion": asset_version("js/main.js"),
         "contactsHref": "#contacts",
