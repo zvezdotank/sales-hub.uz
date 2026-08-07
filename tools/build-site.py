@@ -377,6 +377,16 @@ def main() -> int:
             "heroPicture": picture(
                 "hero-rover", "hero", "", "hero-photo-img", eager=True, sizes="100vw"
             ),
+            # Слой со свечением изнутри модуля: тот же кадр, те же правила
+            # object-fit, поэтому совмещается при любом размере экрана.
+            "heroGlow": (
+                '<picture>'
+                '<source type="image/avif" srcset="assets/img/hero-rover-glow.avif">'
+                '<source type="image/webp" srcset="assets/img/hero-rover-glow.webp">'
+                '<img src="assets/img/hero-rover-glow.webp" alt="" aria-hidden="true" '
+                'width="1920" height="1175" class="hero-glow-img" decoding="async">'
+                '</picture>'
+            ),
             "processPicture": picture(
                 "process-missioncontrol", "banner",
                 "Центр управления кампаниями Sales Hub", "process-banner-img",
