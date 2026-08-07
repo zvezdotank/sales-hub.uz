@@ -1059,6 +1059,126 @@ section:not(.hero) {
 }
 .feature-item p { font-size: 14px; color: var(--text); line-height: 1.45; padding-top: 6px; }
 
+/* ---------- тариф ---------- */
+
+.pricing-grid {
+  display: grid;
+  grid-template-columns: 360px 1fr;
+  gap: 28px;
+  align-items: start;
+  margin-bottom: 40px;
+}
+
+.price-card {
+  position: relative;
+  padding: 32px 30px 30px;
+  background: var(--panel);
+  border: 1px solid var(--accent-line);
+  border-radius: var(--radius);
+  backdrop-filter: blur(14px);
+  overflow: hidden;
+}
+.price-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 90% 60% at 50% 0%, rgba(255, 181, 71, 0.12), transparent 70%);
+  pointer-events: none;
+}
+.price-amount {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 16px;
+  position: relative;
+}
+.price-value {
+  font-family: var(--font-accent);
+  /* Michroma широкий: «1 250 000» рвалось на две строки. Держим в одну. */
+  font-size: clamp(26px, 3.2vw, 38px);
+  white-space: nowrap;
+  line-height: 1.05;
+  color: var(--accent);
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+}
+.price-unit {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  letter-spacing: 0.06em;
+  color: var(--text-dim);
+}
+.price-note {
+  position: relative;
+  font-size: 13.5px;
+  color: var(--text-dim);
+  line-height: 1.55;
+  margin-bottom: 24px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+}
+.price-card .btn { position: relative; }
+
+.price-includes {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 14px 24px;
+  align-content: start;
+  padding-top: 6px;
+}
+.price-includes li {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 14.5px;
+  color: var(--text);
+  line-height: 1.5;
+}
+.price-includes svg { color: var(--accent); flex-shrink: 0; margin-top: 3px; }
+
+.compare-wrap { overflow-x: auto; border-radius: var(--radius); margin-bottom: 24px; }
+.compare-table {
+  width: 100%;
+  min-width: 520px;
+  border-collapse: collapse;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+.compare-table th, .compare-table td {
+  text-align: left;
+  padding: 15px 20px;
+  font-size: 14px;
+  border-bottom: 1px solid var(--border);
+}
+.compare-table thead th {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+  background: rgba(255, 255, 255, 0.02);
+}
+.compare-table tbody th { color: var(--text-dim); font-weight: 400; }
+.compare-table td { color: var(--text-dim); }
+.compare-table tr:last-child th, .compare-table tr:last-child td { border-bottom: none; }
+.compare-table .col-accent { color: var(--accent); font-weight: 600; }
+.compare-table thead .col-accent { color: var(--accent); }
+.compare-table tbody td.col-accent { background: rgba(255, 181, 71, 0.05); }
+
+.price-footnote {
+  font-size: 13.5px;
+  color: var(--text-faint);
+  max-width: 720px;
+  line-height: 1.6;
+}
+
+@media (max-width: 860px) {
+  .pricing-grid { grid-template-columns: 1fr; gap: 22px; }
+  .price-includes { grid-template-columns: 1fr; }
+}
+
 /* ---------- CPA ---------- */
 
 .cpa-explainer {

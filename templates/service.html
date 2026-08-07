@@ -198,6 +198,61 @@
   </section>
 {{/ isCpa }}
 
+{{? pricing }}
+  <section class="pricing" id="pricing" aria-labelledby="pricing-title">
+    <div class="section-inner">
+      <div class="section-head">
+        <span class="section-label">{{ pricing.label }}</span>
+        <h2 id="pricing-title">{{ pricing.title }}</h2>
+        <p>{{ pricing.lead }}</p>
+      </div>
+
+      <div class="pricing-grid">
+        <div class="price-card">
+          <div class="price-amount">
+            <span class="price-value">{{ pricing.price }}</span>
+            <span class="price-unit">{{ pricing.unit }}</span>
+          </div>
+          <p class="price-note">{{ pricing.priceNote }}</p>
+          <a href="#contacts" class="btn btn-primary btn-block">{{ ctaButton }}</a>
+        </div>
+
+        <ul class="price-includes">
+          {{# pricing.includes }}<li>
+            <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false"><path fill="currentColor" d="M9 16.2l-3.5-3.5-1.4 1.4L9 19 20 8l-1.4-1.4z"/></svg>
+            {{ . }}
+          </li>
+          {{/ pricing.includes }}
+        </ul>
+      </div>
+
+      {{? pricing.compare }}
+      <div class="compare-wrap" tabindex="0" role="region" aria-label="Сравнение покупки и аренды сайта">
+        <table class="compare-table">
+          <thead>
+            <tr>
+              <th scope="col"></th>
+              <th scope="col">Купить сайт</th>
+              <th scope="col" class="col-accent">Арендовать</th>
+            </tr>
+          </thead>
+          <tbody>
+            {{# pricing.compare }}<tr>
+              <th scope="row">{{ k }}</th>
+              <td>{{ own }}</td>
+              <td class="col-accent">{{ rent }}</td>
+            </tr>
+            {{/ pricing.compare }}
+          </tbody>
+        </table>
+      </div>
+      {{/ pricing.compare }}
+
+      {{? pricing.footnote }}<p class="price-footnote">{{ pricing.footnote }}</p>{{/ pricing.footnote }}
+    </div>
+  </section>
+{{/ pricing }}
+
 {{? faq }}
   <section class="faq" id="faq" aria-labelledby="faq-title">
     <div class="section-inner">
