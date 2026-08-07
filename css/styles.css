@@ -1761,13 +1761,19 @@ a.contact-detail-v:hover { color: var(--accent); }
   box-shadow: 0 6px 20px -6px rgba(255, 181, 71, 0.55);
 }
 .dock-btn--call:active { filter: brightness(0.94); }
-/* Telegram — контур с тем же акцентом, чтобы не спорить за внимание. */
+/* Telegram — тоже оранжевая, но подсвеченная изнутри, а не залитая:
+   две одинаково яркие кнопки рядом заставляли бы выбирать дольше. */
 .dock-btn--tg {
   color: var(--accent);
-  border: 1px solid rgba(255, 181, 71, 0.4);
-  background: rgba(255, 181, 71, 0.07);
+  border: 1px solid rgba(255, 181, 71, 0.55);
+  background:
+    linear-gradient(135deg, rgba(255, 181, 71, 0.22), rgba(255, 122, 61, 0.14));
+  text-shadow: 0 0 10px rgba(255, 181, 71, 0.35);
+  box-shadow:
+    inset 0 0 18px rgba(255, 181, 71, 0.12),
+    0 4px 16px -6px rgba(255, 181, 71, 0.3);
 }
-.dock-btn--tg:active { background: rgba(255, 181, 71, 0.14); }
+.dock-btn--tg:active { background: rgba(255, 181, 71, 0.3); }
 
 /* ---------- появление при скролле ---------- */
 

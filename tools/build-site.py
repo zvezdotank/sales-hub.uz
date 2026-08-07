@@ -9,6 +9,7 @@ site.json, разметка — в templates/, а .html в корне собир
 Запуск:  python3 tools/build-site.py
 """
 
+import hashlib
 import html
 import json
 import re
@@ -308,6 +309,18 @@ def faq_ld(faq: list) -> dict:
 MANIFEST = json.loads((ROOT / "assets" / "img" / "manifest.json").read_text(encoding="utf-8"))
 
 
+def asset_version(rel_path: str) -> str:
+    """Короткий хэш содержимого файла для ?v= в ссылке.
+
+    Без него браузеры отдают закэшированные CSS и JS ещё сутками после
+    публикации: посетитель видит новую разметку со старыми стилями.
+    Хэш меняется только когда меняется сам файл, поэтому кэш не сбрасывается
+    напрасно.
+    """
+    data = (ROOT / rel_path).read_bytes()
+    return hashlib.sha256(data).hexdigest()[:8]
+
+
 def picture(stem: str, preset: str, alt: str, cls: str, *, eager: bool = False, sizes: str = "") -> str:
     """<picture> с AVIF + WebP, точными размерами и правильным приоритетом."""
     w, h = MANIFEST[stem][preset]
@@ -355,6 +368,8 @@ def main() -> int:
         "year": date.today().year,
         "buildDate": date.today().isoformat(),
         "phoneHref": "tel:" + s["phone"],
+        "cssVersion": asset_version("css/styles.css"),
+        "jsVersion": asset_version("js/main.js"),
         "contactsHref": "#contacts",
         "emailHref": "mailto:" + s["email"],
     }
