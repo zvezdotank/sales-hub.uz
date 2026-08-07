@@ -154,6 +154,14 @@ CLIENT_MARKS = {
     "cross": '<path fill="none" stroke="currentColor" stroke-width="1.6" d="M16 4a12 12 0 110 24 12 12 0 010-24z"/><path fill="currentColor" d="M14.4 9h3.2v5.4H23v3.2h-5.4V23h-3.2v-5.4H9v-3.2h5.4z"/>',
     "drop": '<path fill="none" stroke="currentColor" stroke-width="1.6" d="M16 3.5c5 6.3 8 10.6 8 14a8 8 0 11-16 0c0-3.4 3-7.7 8-14z"/><path fill="currentColor" d="M16 12.5c2.4 3 3.6 5 3.6 6.4a3.6 3.6 0 11-7.2 0c0-1.4 1.2-3.4 3.6-6.4z"/>',
     "flame": '<path fill="none" stroke="currentColor" stroke-width="1.6" d="M16 3c1.5 5.2 7 7.4 7 13.2A7 7 0 0116 23a7 7 0 01-7-6.8C9 10.4 14.5 8.2 16 3z"/><path fill="currentColor" d="M16 13.5c.8 2.6 3 3.6 3 6a3 3 0 11-6 0c0-2.4 2.2-3.4 3-6z"/><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" d="M11 26h10"/>',
+    # Растаможка — таможенное оформление. Грузовой контейнер с печатью:
+    # та же геометрическая простота, что и у соседних марок.
+    "container": (
+        '<path fill="none" stroke="currentColor" stroke-width="1.7" d="M4.5 10h23v13.5h-23z"/>'
+        '<path fill="none" stroke="currentColor" stroke-width="1.3" d="M11 10v13.5M21 10v13.5"/>'
+        '<circle cx="16" cy="16.75" r="3" fill="currentColor"/>'
+        '<path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" d="M7 26.5h18"/>'
+    ),
     # Picasso — арт-студия. Собственная марка: палитра с отверстием и мазком
     # кисти. Держит ту же геометрическую простоту, что и соседние марки, —
     # детальный линейный профиль в 30px превращался в неразборчивый росчерк.
@@ -171,6 +179,9 @@ CLIENTS = [
     {"name": "Lukoil", "mark": "drop", "sector": "Нефтегаз"},
     {"name": "Gazpromneft", "mark": "flame", "sector": "Нефтегаз"},
     {"name": "Picasso", "mark": "picasso", "sector": "Арт-студия"},
+    # Латиницей, как в домене raztamojka.uz: Michroma не содержит кириллицы,
+    # и написание «Растаможка.uz» выпало бы на запасной шрифт — ряд бы поехал.
+    {"name": "Raztamojka.uz", "mark": "container", "sector": "Таможенное оформление"},
 ]
 
 

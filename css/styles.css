@@ -939,8 +939,10 @@ section:not(.hero) {
 
 .client-wall {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
-  gap: 16px;
+  /* 168px даёт шесть карточек в один ряд на десктопе: при 190px шестая
+     срывалась на вторую строку и висела там в одиночестве. */
+  grid-template-columns: repeat(auto-fit, minmax(168px, 1fr));
+  gap: 14px;
 }
 .client-item {
   display: flex;
