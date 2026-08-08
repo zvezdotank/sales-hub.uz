@@ -36,7 +36,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://www.googletagmanager.com">
-<link rel="stylesheet" href="css/styles.css?v=0e8e0c0c">
+<link rel="stylesheet" href="css/styles.css?v=582e99f1">
 <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Michroma&amp;family=Archivo:wght@400;600;700&amp;family=Share+Tech+Mono&amp;display=swap" onload="this.rel='stylesheet'">
 <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Michroma&amp;family=Archivo:wght@400;600;700&amp;family=Share+Tech+Mono&amp;display=swap"></noscript>
 <script type="application/ld+json">{
@@ -488,7 +488,7 @@
         </a>
       </div>
 
-      <form class="contact-form" id="contactForm" novalidate>
+      <form class="contact-form" id="contactForm" novalidate data-endpoint="">
         <div class="form-row">
           <label for="field-name">Имя</label>
           <input type="text" id="field-name" name="name" autocomplete="name"
@@ -507,6 +507,12 @@
           <label for="field-message">Сообщение <span class="label-optional">— необязательно</span></label>
           <textarea id="field-message" name="message" rows="4"
                     placeholder="Расскажите коротко о задаче"></textarea>
+        </div>
+        <!-- Приманка для спам-ботов: человек этого поля не видит, бот заполняет
+             все поля подряд. Заполненное поле — признак робота. -->
+        <div class="form-honeypot" aria-hidden="true">
+          <label for="field-company">Компания</label>
+          <input type="text" id="field-company" name="company" tabindex="-1" autocomplete="off">
         </div>
         <button type="submit" class="btn btn-primary btn-block">
           <span class="btn-text">Отправить заявку</span>
@@ -591,7 +597,7 @@
   </div>
 </nav>
 
-<script src="js/main.js?v=1ef9bbdb" defer></script>
+<script src="js/main.js?v=930e5fc7" defer></script>
 
 </body>
 </html>

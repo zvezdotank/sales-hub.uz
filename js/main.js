@@ -2,11 +2,9 @@
 // Sales Hub — interactions
 // ===========================
 
-// Куда уходят заявки. Пока пусто — форма работает в режиме заглушки и честно
-// предлагает написать в Telegram. Подставьте сюда URL обработчика
-// (Formspree, Web3Forms, свой бэкенд или Telegram-бот) — остальной код готов.
-const FORM_ENDPOINT = '';
-
+// Адрес обработчика заявок берётся из data-endpoint на форме, а он — из
+// site.json. Пока адрес пуст, форма честно предлагает написать в Telegram
+// вместо того, чтобы делать вид, что заявка ушла.
 const TELEGRAM_URL = 'https://t.me/Saleshubuzb';
 
 const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -358,8 +356,10 @@ function initContactForm() {
       return;
     }
 
+    const endpoint = form.dataset.endpoint || '';
+
     // Обработчик ещё не подключён: не делаем вид, что заявка ушла.
-    if (!FORM_ENDPOINT) {
+    if (!endpoint) {
       track('form_blocked');
       note.className = 'form-note error';
       note.innerHTML =
@@ -374,10 +374,13 @@ function initContactForm() {
     note.textContent = 'Отправляем заявку…';
 
     try {
-      const response = await fetch(FORM_ENDPOINT, {
+      const payload = Object.fromEntries(new FormData(form));
+      payload.page = location.pathname; // видно, с какой страницы пришла заявка
+
+      const response = await fetch(endpoint, {
         method: 'POST',
-        headers: { 'Accept': 'application/json' },
-        body: new FormData(form),
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
       });
       if (!response.ok) throw new Error('HTTP ' + response.status);
 

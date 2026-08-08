@@ -30,7 +30,7 @@
         </a>
       </div>
 
-      <form class="contact-form" id="contactForm" novalidate>
+      <form class="contact-form" id="contactForm" novalidate data-endpoint="{{ formEndpoint }}">
         <div class="form-row">
           <label for="field-name">Имя</label>
           <input type="text" id="field-name" name="name" autocomplete="name"
@@ -49,6 +49,12 @@
           <label for="field-message">Сообщение <span class="label-optional">— необязательно</span></label>
           <textarea id="field-message" name="message" rows="4"
                     placeholder="Расскажите коротко о задаче"></textarea>
+        </div>
+        <!-- Приманка для спам-ботов: человек этого поля не видит, бот заполняет
+             все поля подряд. Заполненное поле — признак робота. -->
+        <div class="form-honeypot" aria-hidden="true">
+          <label for="field-company">Компания</label>
+          <input type="text" id="field-company" name="company" tabindex="-1" autocomplete="off">
         </div>
         <button type="submit" class="btn btn-primary btn-block">
           <span class="btn-text">Отправить заявку</span>

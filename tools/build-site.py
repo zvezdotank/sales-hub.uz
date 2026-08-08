@@ -370,6 +370,7 @@ def main() -> int:
         "phoneHref": "tel:" + s["phone"],
         "schedule": data["schedule"],
         "workdaysAttr": ",".join(str(d) for d in data["schedule"]["workdays"]),
+        "formEndpoint": s.get("formEndpoint", ""),
         "cssVersion": asset_version("css/styles.css"),
         "jsVersion": asset_version("js/main.js"),
         "contactsHref": "#contacts",

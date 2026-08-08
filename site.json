@@ -18,7 +18,8 @@
     "lon": "69.2797",
     "founded": "2018",
     "priceRange": "$$",
-    "ga4": "G-QYDQFENMBS"
+    "ga4": "G-QYDQFENMBS",
+    "formEndpoint": ""
   },
   "_metrics_note": "Замените на свои подтверждённые данные. Каждая цифра на сайте должна быть защитима перед клиентом.",
   "heroStats": [

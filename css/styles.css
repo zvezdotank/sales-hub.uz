@@ -1547,6 +1547,16 @@ a.contact-detail-v:hover { color: var(--accent); }
   text-transform: uppercase;
 }
 .label-optional { text-transform: none; letter-spacing: 0; }
+
+/* Поле-приманка для спам-ботов. Убираем из виду и из потока табуляции,
+   но не через display:none — часть ботов такие поля пропускает. */
+.form-honeypot {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
 .form-row input, .form-row textarea {
   background: rgba(255, 255, 255, 0.03);
   border: 1px solid var(--border-strong);
