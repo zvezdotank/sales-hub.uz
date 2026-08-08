@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+{{> _head }}
+</head>
+<body>
+
+{{> _header }}
+
+<main id="main">
+  <section class="error-page">
+    <div class="section-inner error-inner">
+      <p class="mission-tag">
+        <span class="mission-dot" aria-hidden="true"></span>
+        СИГНАЛ ПОТЕРЯН · КОД 404
+      </p>
+
+      <h1 class="error-code" aria-hidden="true">404</h1>
+      <p class="error-title">Страница ушла с орбиты</p>
+      <p class="error-text">
+        Такой страницы нет — возможно, в адресе опечатка или она переехала.
+        Ниже — всё, что работает.
+      </p>
+
+      <div class="error-ctas">
+        <a href="index.html" class="btn btn-primary">На главную</a>
+        <a href="{{ site.telegram }}" class="btn btn-ghost" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false"><path fill="currentColor" d="M21 4L2.5 11.4c-1.2.5-1.2 1.2-.2 1.5l4.8 1.5 1.8 5.6c.2.6.4.8.9.8.4 0 .6-.2.9-.5l2.1-2 4.4 3.2c.8.5 1.4.2 1.6-.7l3-14c.3-1.2-.4-1.7-1.4-1.3zM7.9 13.7l9-5.6c.4-.3.8-.1.5.2l-7.6 6.9-.3 3.2-1.6-4.7z"/></svg>
+          Написать в Telegram
+        </a>
+      </div>
+
+      <nav class="error-links" aria-label="Услуги">
+        <span class="error-links-title">// Услуги</span>
+        <div class="error-links-grid">
+          {{# services }}<a href="{{ url }}" class="related-card">
+            <span class="related-ico" aria-hidden="true">{{& iconSvgSm }}</span>
+            <span class="related-name">{{ title }}</span>
+          </a>
+          {{/ services }}
+        </div>
+      </nav>
+    </div>
+  </section>
+</main>
+
+{{> _footer }}
+</body>
+</html>

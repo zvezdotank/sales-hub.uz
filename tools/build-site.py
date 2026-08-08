@@ -489,6 +489,35 @@ def main() -> int:
     )
     written.append(("privacy.html", render((TPL / "privacy.html").read_text(encoding="utf-8"), priv)))
 
+    # ---- страница 404
+    nf = dict(base)
+    nf.update(
+        {
+            "pageTitle": "Страница не найдена",
+            "metaTitle": f"Страница не найдена — {s['name']}",
+            "metaDescription": "Такой страницы на сайте нет. Вернитесь на главную или выберите нужную услугу.",
+            "canonical": f"{s['origin']}/404.html",
+            "ogImage": f"{s['origin']}/assets/og/og-default.jpg",
+            "isIndex": False,
+            "homeHref": "/",
+            "navPrefix": "/",
+            "contactsHref": "/#contacts",
+            "noindex": True,
+            "structuredData": "",
+        }
+    )
+    page404 = render((TPL / "404.html").read_text(encoding="utf-8"), nf)
+    # Ошибка может возникнуть на любом уровне вложенности, поэтому все
+    # относительные пути превращаем в абсолютные — иначе на /услуги/что-то
+    # стили и ссылки поехали бы.
+    for prefix in ('href="', 'src="', 'srcset="'):
+        for asset in ("css/", "js/", "assets/", "favicon.ico"):
+            page404 = page404.replace(prefix + asset, prefix + "/" + asset)
+    for svc in services:
+        page404 = page404.replace(f'href="{svc["slug"]}.html"', f'href="/{svc["slug"]}.html"')
+    page404 = page404.replace('href="index.html"', 'href="/"').replace('href="privacy.html"', 'href="/privacy.html"')
+    written.append(("404.html", page404))
+
     # ---- запись
     for name, content in written:
         (ROOT / name).write_text(content, encoding="utf-8")

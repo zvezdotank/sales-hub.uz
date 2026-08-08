@@ -1571,6 +1571,45 @@ a.contact-detail-v:hover { color: var(--accent); }
 .form-note.success { color: var(--success); }
 .form-note.error { color: var(--danger); }
 
+/* ---------- страница 404 ---------- */
+
+.error-page { padding-top: calc(var(--header-h) + 70px); }
+.error-inner { max-width: 760px; }
+.error-code {
+  font-family: var(--font-accent);
+  font-size: clamp(72px, 14vw, 148px);
+  line-height: 1;
+  color: var(--accent);
+  letter-spacing: -0.02em;
+  margin-bottom: 18px;
+  text-shadow: 0 0 60px rgba(255, 181, 71, 0.28);
+}
+.error-title {
+  font-size: clamp(22px, 3vw, 30px);
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+.error-text { color: var(--text-dim); font-size: 16px; max-width: 520px; margin-bottom: 30px; }
+.error-ctas { display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 56px; }
+.error-links-title {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  color: var(--text-faint);
+  margin-bottom: 16px;
+}
+.error-links-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 12px;
+}
+
+@media (max-width: 560px) {
+  .error-ctas { flex-direction: column; align-items: stretch; }
+  .error-ctas .btn { width: 100%; }
+}
+
 /* ---------- юридическая страница ---------- */
 
 .legal-page { padding-top: calc(var(--header-h) + 60px); }
@@ -1835,6 +1874,13 @@ a.contact-detail-v:hover { color: var(--accent); }
   .orient-dial { display: none; }
   .mobile-dock { display: flex; }
   .scroll-top { bottom: 108px; }
+
+  /* Зоны нажатия на телефоне: контакты и гамбургер были 23–32px, палец
+     промахивался. Ниже 44px опускаться не стоит. */
+  .contact-detail { padding: 10px 0; }
+  a.contact-detail-v { display: inline-flex; align-items: center; min-height: 44px; }
+  .nav-toggle { padding: 12px 10px; }
+  .footer-contacts a, .footer-nav a { padding: 6px 0; }
   section:not(.hero) { padding: 72px 0; }
   .site-footer { padding-bottom: 124px; }
 }

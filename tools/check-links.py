@@ -36,6 +36,12 @@ def main() -> int:
             path, _, fragment = ref.partition("#")
             path = path.split("?")[0]
 
+            # Ведущий слэш — корень сайта, а не корень файловой системы.
+            # 404.html использует абсолютные пути: она отдаётся по любому
+            # адресу, в том числе вложенному.
+            if path.startswith("/"):
+                path = path.lstrip("/") or "index.html"
+
             if path:
                 target = ROOT / path
                 if not target.exists():
