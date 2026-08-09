@@ -21,7 +21,28 @@ document.addEventListener('DOMContentLoaded', () => {
   initContactForm();
   initSchedule();
   initAnalytics();
+  initFaq();
 });
+
+// --- Вопросы и ответы -------------------------------------------------------
+
+function initFaq() {
+  document.querySelectorAll('.faq-list').forEach((list) => {
+    const items = [...list.querySelectorAll('.faq-item')];
+
+    // Открытым остаётся только один ответ: когда раскрывают следующий,
+    // предыдущий закрывается сам. Иначе список расползается и теряется
+    // ощущение, что вопросов немного.
+    items.forEach((item) => {
+      item.addEventListener('toggle', () => {
+        if (!item.open) return;
+        items.forEach((other) => {
+          if (other !== item) other.open = false;
+        });
+      });
+    });
+  });
+}
 
 // --- Аналитика --------------------------------------------------------------
 // Просмотры страниц GA4 считает сам. Здесь — обращения: без них в отчёте видно
