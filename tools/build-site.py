@@ -118,6 +118,9 @@ def lookup(ctx: dict, path: str):
     for part in path.split("."):
         if isinstance(cur, dict):
             cur = cur.get(part)
+        elif isinstance(cur, list) and part.isdigit():
+            idx = int(part)
+            cur = cur[idx] if idx < len(cur) else None
         else:
             return None
     return cur

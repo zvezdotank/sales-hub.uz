@@ -139,7 +139,7 @@
     <div class="section-inner">
       <div class="intro-body">
         <h2 id="intro-title">{{ introTitle }}</h2>
-        {{# intro }}<p>{{ . }}</p>
+        {{# intro }}<p>{{& . }}</p>
         {{/ intro }}
       </div>
     </div>
@@ -227,13 +227,13 @@
       </div>
 
       {{? pricing.compare }}
-      <div class="compare-wrap" tabindex="0" role="region" aria-label="Сравнение покупки и аренды сайта">
+      <div class="compare-wrap" tabindex="0" role="region" aria-label="Сравнение вариантов">
         <table class="compare-table">
           <thead>
             <tr>
               <th scope="col"></th>
-              <th scope="col">Купить сайт</th>
-              <th scope="col" class="col-accent">Арендовать</th>
+              <th scope="col">{{ pricing.compareHeads.0 }}</th>
+              <th scope="col" class="col-accent">{{ pricing.compareHeads.1 }}</th>
             </tr>
           </thead>
           <tbody>
