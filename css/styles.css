@@ -1,3 +1,5 @@
+@import url('fonts.css');
+
 /* ===========================
    Sales Hub — Space HUD theme
    =========================== */
@@ -21,9 +23,13 @@
   --success: #4ade80;
   --danger: #ff8080;
 
-  --font-accent: 'Michroma', 'Archivo', system-ui, sans-serif;
-  --font-body: 'Archivo', system-ui, -apple-system, 'Segoe UI', sans-serif;
-  --font-mono: 'Share Tech Mono', ui-monospace, 'SF Mono', monospace;
+  /* Manrope и JetBrains Mono содержат кириллицу — прежние Archivo и
+     Share Tech Mono её не имели, и весь русский текст отрисовывался
+     системным шрифтом, по-разному на каждом устройстве.
+     Michroma оставлена: она используется только для латиницы и цифр. */
+  --font-accent: 'Michroma', 'Manrope', system-ui, sans-serif;
+  --font-body: 'Manrope', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, 'SF Mono', monospace;
 
   --radius: 14px;
   --container: 1240px;

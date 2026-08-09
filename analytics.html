@@ -15,7 +15,7 @@
      домена просто не выполнится, а форма не сможет отправить данные чужому
      адресату. Директива frame-ancestors через мета-тег не работает — от
      встраивания в чужой сайт таким способом не защититься. -->
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https://www.google-analytics.com https://www.googletagmanager.com; connect-src 'self' https://www.google-analytics.com https://analytics.google.com https://www.googletagmanager.com https://*.workers.dev; form-action 'self' https://*.workers.dev; base-uri 'self'; object-src 'none'; upgrade-insecure-requests">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: https://www.google-analytics.com https://www.googletagmanager.com; connect-src 'self' https://www.google-analytics.com https://analytics.google.com https://www.googletagmanager.com https://*.workers.dev; form-action 'self' https://*.workers.dev; base-uri 'self'; object-src 'none'; upgrade-insecure-requests">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="author" content="Sales Hub">
 <meta name="geo.region" content="UZ-TK">
@@ -42,12 +42,12 @@
 <link rel="shortcut icon" href="favicon.ico">
 <link rel="apple-touch-icon" sizes="180x180" href="assets/icons/apple-touch-icon.png">
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preconnect" href="https://www.googletagmanager.com">
-<link rel="stylesheet" href="css/styles.css?v=582e99f1">
-<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Michroma&amp;family=Archivo:wght@400;600;700&amp;family=Share+Tech+Mono&amp;display=swap" onload="this.rel='stylesheet'">
-<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Michroma&amp;family=Archivo:wght@400;600;700&amp;family=Share+Tech+Mono&amp;display=swap"></noscript>
+<link rel="stylesheet" href="css/styles.css?v=647002ed">
+<!-- Шрифты лежат на своём домене: без обращения к Google на каждой
+     загрузке. Предзагружаем те наборы, что нужны первому экрану. -->
+<link rel="preload" as="font" type="font/woff2" href="assets/fonts/manrope-cyrillic-400_700.woff2" crossorigin>
+<link rel="preload" as="font" type="font/woff2" href="assets/fonts/manrope-latin-400_700.woff2" crossorigin>
+<link rel="preload" as="font" type="font/woff2" href="assets/fonts/jetbrains-mono-cyrillic-400_500.woff2" crossorigin>
 <script type="application/ld+json">{
   "@context": "https://schema.org",
   "@type": "Service",
