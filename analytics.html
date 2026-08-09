@@ -8,6 +8,15 @@
 <link rel="canonical" href="https://sales-hub.uz/analytics.html">
 <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
 <meta name="theme-color" content="#05070c">
+
+<!-- Ограничиваем, откуда странице разрешено грузить код и куда отправлять
+     данные. GitHub Pages не даёт задавать HTTP-заголовки, поэтому политика
+     объявляется мета-тегом. Так подменённый или внедрённый скрипт со стороннего
+     домена просто не выполнится, а форма не сможет отправить данные чужому
+     адресату. Директива frame-ancestors через мета-тег не работает — от
+     встраивания в чужой сайт таким способом не защититься. -->
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https://www.google-analytics.com https://www.googletagmanager.com; connect-src 'self' https://www.google-analytics.com https://analytics.google.com https://www.googletagmanager.com https://*.workers.dev; form-action 'self' https://*.workers.dev; base-uri 'self'; object-src 'none'; upgrade-insecure-requests">
+<meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="author" content="Sales Hub">
 <meta name="geo.region" content="UZ-TK">
 <meta name="geo.placename" content="Ташкент">
