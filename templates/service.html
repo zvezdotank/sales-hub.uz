@@ -198,6 +198,46 @@
   </section>
 {{/ isCpa }}
 
+{{? portfolio }}
+  <section class="works" id="works" aria-labelledby="works-title">
+    <div class="section-inner">
+      <div class="section-head">
+        <span class="section-label">{{ portfolio.label }}</span>
+        <h2 id="works-title">{{ portfolio.title }}</h2>
+        <p>{{ portfolio.lead }}</p>
+      </div>
+
+      <div class="works-grid">
+        {{# portfolio.items }}<article class="work" style="--shot-time: {{ shotTime }}s">
+          <div class="work-screen">
+            <div class="work-bar">
+              <span class="work-led" aria-hidden="true"></span>
+              <span class="work-domain">{{ domain }}</span>
+              <span class="work-hint" aria-hidden="true">пролистать</span>
+            </div>
+            <div class="work-glass" tabindex="0" role="region" aria-label="Сайт {{ domain }}: страница целиком, прокручивается">
+              {{& shotPicture }}
+            </div>
+          </div>
+
+          <p class="work-kind">{{ kind }}</p>
+          <h3 class="work-name">{{ name }}</h3>
+          <p class="work-note">{{ note }}</p>
+          <ul class="work-tags">
+            {{# tags }}<li>{{ . }}</li>
+            {{/ tags }}
+          </ul>
+          <a class="work-link" href="{{ url }}" target="_blank" rel="noopener">
+            Открыть сайт
+            <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true" focusable="false"><path fill="currentColor" d="M14 3v2h3.6l-9.3 9.3 1.4 1.4L19 6.4V10h2V3zM5 5h5V3H3v18h18v-7h-2v5H5z"/></svg>
+          </a>
+        </article>
+        {{/ portfolio.items }}
+      </div>
+    </div>
+  </section>
+{{/ portfolio }}
+
 {{? pricing }}
   <section class="pricing" id="pricing" aria-labelledby="pricing-title">
     <div class="section-inner">

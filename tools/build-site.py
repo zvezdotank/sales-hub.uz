@@ -311,6 +311,15 @@ def faq_ld(faq: list) -> dict:
 
 MANIFEST = json.loads((ROOT / "assets" / "img" / "manifest.json").read_text(encoding="utf-8"))
 
+_SHOTS = ROOT / "assets" / "img" / "portfolio" / "manifest.json"
+SHOTS = json.loads(_SHOTS.read_text(encoding="utf-8")) if _SHOTS.exists() else {}
+
+# Кадр в портфолио прокручивается за постоянное время, а не с постоянной
+# скоростью: иначе короткая страница пролетает мгновенно, а длинная листается
+# бесконечно. Границы подобраны на глаз — быстрее 5 секунд не успеваешь
+# разглядеть, дольше 12 надоедает держать курсор.
+SHOT_TIME = (5.0, 12.0, 1.6)  # минимум, максимум, множитель к пропорции кадра
+
 
 def asset_version(rel_path: str) -> str:
     """Короткий хэш содержимого файла для ?v= в ссылке.
@@ -338,6 +347,40 @@ def picture(stem: str, preset: str, alt: str, cls: str, *, eager: bool = False, 
         f'width="{w}" height="{h}" class="{cls}"{loading}{priority}>'
         "</picture>"
     )
+
+
+def portfolio(sv: dict) -> "dict | None":
+    """Блок работ: к каждой добавляет снимок сайта и время прокрутки кадра."""
+    block = sv.get("portfolio")
+    if not block:
+        return None
+
+    items = []
+    for it in block["items"]:
+        slug = it["slug"]
+        if slug not in SHOTS:
+            raise SystemExit(
+                f"Нет снимка сайта «{slug}». Запустите: python3 tools/build-portfolio.py"
+            )
+        w, h = SHOTS[slug]
+        low, high, k = SHOT_TIME
+        alt = f"Сайт {it['domain']} — страница целиком"
+        items.append(
+            {
+                **it,
+                "shotTime": f"{min(max(h / w * k, low), high):.1f}",
+                "shotPicture": (
+                    "<picture>"
+                    f'<source type="image/avif" srcset="assets/img/portfolio/{slug}-shot.avif">'
+                    f'<source type="image/webp" srcset="assets/img/portfolio/{slug}-shot.webp">'
+                    f'<img src="assets/img/portfolio/{slug}-shot.webp" '
+                    f'alt="{html.escape(alt, quote=True)}" width="{w}" height="{h}" '
+                    'class="work-shot" loading="lazy" decoding="async">'
+                    "</picture>"
+                ),
+            }
+        )
+    return {**block, "items": items}
 
 
 # --------------------------------------------------------------------- сборка
@@ -466,6 +509,7 @@ def main() -> int:
                     "contact-mars", "bg", "", "contact-bg-img", sizes="100vw"
                 ),
                 "isCpa": sv.get("custom") == "cpa",
+                "portfolio": portfolio(sv),
                 "structuredData": "\n".join(
                     [jsonld(service_page_ld(s, sv)), jsonld(breadcrumb_ld(s, sv))]
                     + ([jsonld(faq_ld(sv["faq"]))] if sv.get("faq") else [])
