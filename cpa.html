@@ -44,10 +44,16 @@
 
 <link rel="stylesheet" href="css/styles.css?v=91872ae9">
 <!-- Шрифты лежат на своём домене: без обращения к Google на каждой
-     загрузке. Предзагружаем те наборы, что нужны первому экрану. -->
+     загрузке. Предзагружаем ровно те наборы, что нужны первому экрану.
+     Michroma — логотип в шапке, латиница JetBrains Mono — номер телефона и
+     метка миссии. Без этих двух строк браузер находил их только после
+     разбора стилей и начинал качать на 292 мс позже: логотип и телефон
+     успевали моргнуть запасным шрифтом. -->
 <link rel="preload" as="font" type="font/woff2" href="assets/fonts/manrope-cyrillic-400_700.woff2" crossorigin>
 <link rel="preload" as="font" type="font/woff2" href="assets/fonts/manrope-latin-400_700.woff2" crossorigin>
 <link rel="preload" as="font" type="font/woff2" href="assets/fonts/jetbrains-mono-cyrillic-400_500.woff2" crossorigin>
+<link rel="preload" as="font" type="font/woff2" href="assets/fonts/jetbrains-mono-latin-400_500.woff2" crossorigin>
+<link rel="preload" as="font" type="font/woff2" href="assets/fonts/michroma-latin-400.woff2" crossorigin>
 <script type="application/ld+json">{
   "@context": "https://schema.org",
   "@type": "Service",
@@ -143,10 +149,30 @@
   window.gtag = function () { window.dataLayer.push(arguments); };
   window.gtag('js', new Date());
   window.gtag('config', 'G-QYDQFENMBS');
-  var s = document.createElement('script');
-  s.async = true;
-  s.src = 'https://www.googletagmanager.com/gtag/js?id=G-QYDQFENMBS';
-  document.head.appendChild(s);
+
+  // Сам gtag.js весит 157 КБ — больше, чем все картинки первого экрана вместе.
+  // Поэтому подключаем его не сразу, а после полной загрузки страницы: он
+  // перестаёт отнимать канал у шрифтов и фотографии героя. На статистику это
+  // не влияет — вызовы gtag() до загрузки скрипта копятся в dataLayer и
+  // обрабатываются, как только он приедет.
+  var loaded = false;
+  var load = function () {
+    if (loaded) return;
+    loaded = true;
+    var s = document.createElement('script');
+    s.async = true;
+    s.src = 'https://www.googletagmanager.com/gtag/js?id=G-QYDQFENMBS';
+    document.head.appendChild(s);
+  };
+
+  if (document.readyState === 'complete') load();
+  else window.addEventListener('load', load, { once: true });
+  // Страховка: если событие load почему-то не наступит, счётчик всё равно
+  // подключится. Клик или касание тоже запускают его раньше срока.
+  setTimeout(load, 4000);
+  ['pointerdown', 'keydown'].forEach(function (e) {
+    window.addEventListener(e, load, { once: true, passive: true });
+  });
 })();
 </script>
 
@@ -537,7 +563,7 @@
   </div>
 </nav>
 
-<script src="js/main.js?v=e9275c43" defer></script>
+<script src="js/main.js?v=ccf87ca3" defer></script>
 
 </body>
 </html>

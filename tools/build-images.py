@@ -33,7 +33,10 @@ PLAN = {
     "hero-rover":            ["hero"],
     "service-context":       ["card", "hero"],
     "service-seo":           ["card", "hero"],
-    "service-smm":           ["card", "hero"],
+    # Только card: шапку страницы SMM рисует другой кадр, service-smm-cabin.
+    # Пока здесь стоял и "hero", скрипт исправно генерировал самый тяжёлый
+    # файл в репозитории (157 КБ), на который никто не ссылался.
+    "service-smm":           ["card"],
     "service-smm-cabin":     ["hero"],
     "service-webdev":        ["card", "hero"],
     "service-analytics":     ["card", "hero"],

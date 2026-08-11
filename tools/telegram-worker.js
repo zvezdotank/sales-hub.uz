@@ -47,8 +47,11 @@ export default {
       return json({ ok: false, error: 'method_not_allowed' }, 405, origin);
     }
     // Заявки принимаем только со своего сайта — иначе форму можно дёргать
-    // откуда угодно и завалить чат мусором.
-    if (origin && !ALLOWED_ORIGINS.includes(origin)) {
+    // откуда угодно и завалить чат мусором. Пустой Origin тоже отклоняем:
+    // браузер на межсайтовый POST его всегда проставляет, а вот curl и
+    // скрипты — нет, и проверку было бы достаточно обойти, просто не послав
+    // заголовок.
+    if (!ALLOWED_ORIGINS.includes(origin)) {
       return json({ ok: false, error: 'forbidden_origin' }, 403, origin);
     }
     if (!env.BOT_TOKEN || !env.CHAT_ID) {

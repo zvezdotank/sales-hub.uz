@@ -157,11 +157,11 @@ function observeOnce(elements, onEnter, threshold) {
 }
 
 function initReveal() {
+  if (prefersReducedMotion) return;
+
   const targets = [...document.querySelectorAll(
     '.service-card, .route-step, .why-stat-card, .client-item, .faq-item, .contact-panel, .section-head'
   )];
-  if (prefersReducedMotion) return;
-
   targets.forEach((el) => el.classList.add('reveal'));
   observeOnce(targets, (el) => el.classList.add('in-view'), 0.15);
 }
