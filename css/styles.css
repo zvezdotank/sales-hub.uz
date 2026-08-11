@@ -791,10 +791,13 @@ button { font: inherit; color: inherit; }
 
 /* ---------- общие стили секций ---------- */
 
+/* Отступ секции с одной стороны. Между двумя соседними секциями его два,
+   так что на границе получается вдвое больше — при 100px выходило 200px
+   пустоты между каждой парой блоков, и страница читалась разреженной. */
 section:not(.hero) {
   position: relative;
   z-index: 1;
-  padding: 100px 0;
+  padding: 68px 0;
   scroll-margin-top: var(--header-h);
 }
 
@@ -806,7 +809,7 @@ section:not(.hero) {
   color: var(--accent);
   margin-bottom: 14px;
 }
-.section-head { max-width: 660px; margin-bottom: 52px; }
+.section-head { max-width: 660px; margin-bottom: 38px; }
 .section-head h2, .why-text h2, .contact-info h2 {
   font-size: clamp(26px, 3.2vw, 38px);
   font-weight: 600;
@@ -1190,7 +1193,7 @@ section:not(.hero) {
 
 /* Ряд одинаковых карточек читается как каталог товаров. Сдвиг через одну
    ломает эту линию — получается стопка распечаток, разложенных на столе. */
-.works-grid .work:nth-child(even) { margin-top: 58px; }
+.works-grid .work:nth-child(even) { margin-top: 42px; }
 
 .work { --shot-h: 360px; }
 
@@ -1527,7 +1530,10 @@ section:not(.hero) {
 
 /* ---------- другие услуги ---------- */
 
-.related-services { border-top: 1px solid var(--border); padding: 56px 0; }
+/* Селектор с тегом не случаен: общее правило section:not(.hero) специфичнее
+   одного класса и раньше перебивало этот отступ — блок «Другие услуги»
+   задумывался теснее остальных, но выходил такой же высоты. */
+section.related-services { border-top: 1px solid var(--border); padding: 44px 0; }
 .related-services-head { margin-bottom: 24px; }
 .related-services-head h2 {
   font-family: var(--font-mono);
@@ -2065,7 +2071,7 @@ a.contact-detail-v:hover { color: var(--accent); }
   a.contact-detail-v { display: inline-flex; align-items: center; min-height: 44px; }
   .nav-toggle { padding: 12px 10px; }
   .footer-contacts a, .footer-nav a { padding: 6px 0; }
-  section:not(.hero) { padding: 72px 0; }
+  section:not(.hero) { padding: 52px 0; }
   .site-footer { padding-bottom: 124px; }
 }
 
