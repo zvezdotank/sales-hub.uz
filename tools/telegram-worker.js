@@ -43,6 +43,20 @@ export default {
     if (request.method === 'OPTIONS') {
       return new Response(null, { status: 204, headers: cors(origin) });
     }
+
+    // Проверка вручную: откройте адрес воркера в браузере. Страница скажет,
+    // жив ли он и заданы ли обе переменные. Сами значения не показываем.
+    if (request.method === 'GET') {
+      const ready = Boolean(env.BOT_TOKEN && env.CHAT_ID);
+      return new Response(
+        ready
+          ? 'Воркер работает, токен и чат заданы. Можно подключать форму.'
+          : 'Воркер работает, но не хватает переменных: '
+            + [!env.BOT_TOKEN && 'BOT_TOKEN', !env.CHAT_ID && 'CHAT_ID'].filter(Boolean).join(', '),
+        { status: ready ? 200 : 503, headers: { 'Content-Type': 'text/plain; charset=utf-8' } },
+      );
+    }
+
     if (request.method !== 'POST') {
       return json({ ok: false, error: 'method_not_allowed' }, 405, origin);
     }
