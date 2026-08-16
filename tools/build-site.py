@@ -437,6 +437,7 @@ def main() -> int:
         "workdaysAttr": ",".join(str(d) for d in data["schedule"]["workdays"]),
         "formEndpoint": s.get("formEndpoint", ""),
         "cssVersion": asset_version("css/styles.css"),
+        "fontsVersion": asset_version("css/fonts.css"),
         "jsVersion": asset_version("js/main.js"),
         "contactsHref": "#contacts",
         "emailHref": "mailto:" + s["email"],
