@@ -42,7 +42,7 @@
 <link rel="shortcut icon" href="favicon.ico">
 <link rel="apple-touch-icon" sizes="180x180" href="assets/icons/apple-touch-icon.png">
 
-<link rel="stylesheet" href="css/styles.css?v=c73ca94b">
+<link rel="stylesheet" href="css/styles.css?v=d67d1fd3">
 <!-- Шрифты лежат на своём домене: без обращения к Google на каждой
      загрузке. Предзагружаем ровно те наборы, что нужны первому экрану.
      Michroma — логотип в шапке, латиница JetBrains Mono — номер телефона и
@@ -514,6 +514,117 @@
   </section>
 
 
+
+<section class="brief" id="brief" aria-labelledby="brief-title">
+  <div class="section-inner">
+    <div class="section-head">
+      <span class="section-label">// Бриф</span>
+      <h2 id="brief-title">Заполните бриф — подготовим предложение</h2>
+      <p>Шесть вопросов, две минуты. По ответам соберём структуру кампаний, подберём каналы и посчитаем прогноз — до того, как вы что-то подпишете.</p>
+    </div>
+
+    <form class="brief-form" id="briefForm" novalidate data-endpoint="">
+      <input type="hidden" name="_form" value="Бриф — контекстная реклама">
+
+      <div class="brief-row">
+        <label for="brief-company">Название компании <span class="req" aria-hidden="true">*</span></label>
+        <input type="text" id="brief-company" name="company" required
+               placeholder="Как называется ваш бизнес" aria-describedby="err-company">
+        <span class="field-error" id="err-company" hidden></span>
+      </div>
+
+      <fieldset class="brief-row brief-goals" aria-describedby="err-goals">
+        <legend>Цель рекламной кампании <span class="req" aria-hidden="true">*</span></legend>
+        <p class="brief-hint">Можно выбрать несколько</p>
+        <div class="brief-checks">
+          <label class="brief-check">
+            <input type="checkbox" name="goals" value="Заявки">
+            <span>Заявки</span>
+          </label>
+          <label class="brief-check">
+            <input type="checkbox" name="goals" value="Рост знания о бренде">
+            <span>Рост знания о бренде</span>
+          </label>
+          <label class="brief-check">
+            <input type="checkbox" name="goals" value="Рост продаж">
+            <span>Рост продаж</span>
+          </label>
+          <label class="brief-check">
+            <input type="checkbox" name="goals" value="Рост подписчиков">
+            <span>Рост подписчиков</span>
+          </label>
+          
+          <label class="brief-check">
+            <input type="checkbox" name="goals" value="Другое" id="brief-goal-other"
+                   aria-controls="brief-goal-other-text">
+            <span>Другое</span>
+          </label>
+        </div>
+        <input type="text" id="brief-goal-other-text" name="goal_other" hidden
+               placeholder="Опишите цель своими словами">
+        <span class="field-error" id="err-goals" hidden></span>
+      </fieldset>
+
+      <div class="brief-row">
+        <label for="brief-budget">Месячный бюджет <span class="req" aria-hidden="true">*</span></label>
+        <input type="text" id="brief-budget" name="budget" required inputmode="numeric"
+               placeholder="от 3 000 000 сум" aria-describedby="err-budget">
+        <span class="field-error" id="err-budget" hidden></span>
+      </div>
+
+      <div class="brief-row">
+        <label for="brief-geo">География рекламы <span class="req" aria-hidden="true">*</span></label>
+        <!-- Список подсказок, но поле остаётся обычным: можно выбрать город
+             из выпадающего списка, а можно вписать своё. -->
+        <input type="text" id="brief-geo" name="geo" required list="brief-geo-options"
+               placeholder="Ташкент, Самарканд, весь Узбекистан…" aria-describedby="err-geo">
+        <datalist id="brief-geo-options">
+          <option value="Ташкент"></option>
+          <option value="Самарканд"></option>
+          <option value="Бухара"></option>
+          <option value="Фергана"></option>
+          <option value="Коканд"></option>
+          <option value="Весь Узбекистан"></option>
+          
+        </datalist>
+        <span class="field-error" id="err-geo" hidden></span>
+      </div>
+
+      <div class="brief-row">
+        <label for="brief-site">Текущий сайт <span class="label-optional">— если есть</span></label>
+        <input type="text" id="brief-site" name="site" placeholder="primer.uz">
+      </div>
+
+      <div class="brief-row">
+        <label for="brief-social">Ссылки на соцсети <span class="label-optional">— если есть</span></label>
+        <input type="text" id="brief-social" name="social" placeholder="Инстаграм или телеграм">
+      </div>
+
+      <div class="brief-row">
+        <label for="brief-contact">Как с вами связаться <span class="req" aria-hidden="true">*</span></label>
+        <input type="text" id="brief-contact" name="contact" required autocomplete="tel"
+               placeholder="+998 __ ___-__-__ или @username" aria-describedby="err-contact">
+        <span class="field-error" id="err-contact" hidden></span>
+      </div>
+
+      <!-- Приманка для спам-ботов: человек этого поля не видит. -->
+      <div class="form-honeypot" aria-hidden="true">
+        <label for="brief-extra">Отдел</label>
+        <input type="text" id="brief-extra" name="department" tabindex="-1" autocomplete="off">
+      </div>
+
+      <div class="brief-submit">
+        <button type="submit" class="btn btn-primary">
+          <span class="btn-text">Отправить бриф</span>
+        </button>
+        <p class="form-note" id="briefNote" role="status">Ответы уходят напрямую нашей команде. Ничего не публикуем и не передаём третьим лицам.</p>
+      </div>
+    </form>
+  </div>
+</section>
+
+
+
   <section class="related-services" aria-labelledby="related-title">
     <div class="section-inner">
       <div class="related-services-head"><h2 id="related-title">Другие услуги</h2></div>
@@ -591,10 +702,12 @@
                     placeholder="Расскажите коротко о задаче"></textarea>
         </div>
         <!-- Приманка для спам-ботов: человек этого поля не видит, бот заполняет
-             все поля подряд. Заполненное поле — признак робота. -->
+             все поля подряд. Заполненное поле — признак робота. Имя поля
+             общее для всех форм сайта и не совпадает ни с одним настоящим:
+             в брифе, например, «company» — это название компании клиента. -->
         <div class="form-honeypot" aria-hidden="true">
-          <label for="field-company">Компания</label>
-          <input type="text" id="field-company" name="company" tabindex="-1" autocomplete="off">
+          <label for="field-department">Отдел</label>
+          <input type="text" id="field-department" name="department" tabindex="-1" autocomplete="off">
         </div>
         <button type="submit" class="btn btn-primary btn-block">
           <span class="btn-text">Отправить заявку</span>
@@ -679,7 +792,7 @@
   </div>
 </nav>
 
-<script src="js/main.js?v=a49cf4fb" defer></script>
+<script src="js/main.js?v=95664528" defer></script>
 
 </body>
 </html>

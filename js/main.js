@@ -24,6 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initFaq();
   initWorksFilter();
   initNavSubmenu();
+  initBriefForm();
 });
 
 // --- Список услуг в шапке ---------------------------------------------------
@@ -391,6 +392,154 @@ function initSchedule() {
   start();
 }
 
+// --- Отправка форм ----------------------------------------------------------
+
+const TELEGRAM_LINK =
+  '<a href="' + TELEGRAM_URL + '" target="_blank" rel="noopener">Telegram</a>';
+
+async function postLead(endpoint, payload) {
+  const response = await fetch(endpoint, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload),
+  });
+  if (!response.ok) throw new Error('HTTP ' + response.status);
+}
+
+// --- Бриф на странице услуги ------------------------------------------------
+
+function initBriefForm() {
+  const form = document.getElementById('briefForm');
+  const note = document.getElementById('briefNote');
+  if (!form || !note) return;
+
+  const defaultNote = note.innerHTML;
+  const button = form.querySelector('button[type="submit"]');
+  const buttonText = button.querySelector('.btn-text');
+  const otherBox = form.querySelector('#brief-goal-other');
+  const otherText = form.querySelector('#brief-goal-other-text');
+  const goals = [...form.querySelectorAll('input[name="goals"]')];
+
+  // Поле для своей формулировки появляется, только когда отмечено «Другое».
+  const syncOther = () => {
+    otherText.hidden = !otherBox.checked;
+    if (!otherBox.checked) otherText.value = '';
+  };
+  otherBox.addEventListener('change', syncOther);
+  syncOther();
+
+  const setError = (key, input, message) => {
+    const box = document.getElementById('err-' + key);
+    if (box) {
+      box.textContent = message || '';
+      box.hidden = !message;
+    }
+    if (input) input.setAttribute('aria-invalid', message ? 'true' : 'false');
+  };
+
+  const required = [
+    ['company', 'Укажите название компании'],
+    ['budget', 'Укажите месячный бюджет'],
+    ['geo', 'Укажите город или регион'],
+    ['contact', 'Оставьте телефон или Telegram для связи'],
+  ];
+
+  const validate = () => {
+    let firstInvalid = null;
+
+    required.forEach(([name, message]) => {
+      const input = form.elements[name];
+      const empty = !input.value.trim();
+      setError(name, input, empty ? message : '');
+      if (empty) firstInvalid = firstInvalid || input;
+    });
+
+    const chosen = goals.filter((g) => g.checked);
+    // «Другое» без пояснения ничего не сообщает, поэтому требуем текст.
+    const otherEmpty = otherBox.checked && !otherText.value.trim();
+    const goalsError = !chosen.length
+      ? 'Выберите хотя бы одну цель'
+      : otherEmpty ? 'Опишите цель в поле «Другое»' : '';
+    setError('goals', null, goalsError);
+    if (goalsError) firstInvalid = firstInvalid || (otherEmpty ? otherText : goals[0]);
+
+    return firstInvalid;
+  };
+
+  // До первой попытки отправить форму молчим: человек только начал заполнять,
+  // и красные подписи под всеми полями сразу — это придирка, а не помощь.
+  // После первой отправки проверяем на каждый ввод, чтобы ошибки гасли сразу.
+  let submitted = false;
+  const recheck = () => { if (submitted) validate(); };
+  form.addEventListener('input', recheck);
+  form.addEventListener('change', recheck);
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    submitted = true;
+    const invalid = validate();
+    if (invalid) {
+      invalid.focus();
+      note.className = 'form-note error';
+      note.textContent = 'Проверьте отмеченные поля.';
+      return;
+    }
+
+    const chosen = goals.filter((g) => g.checked).map((g) => g.value);
+    const other = otherText.value.trim();
+    const payload = {
+      _form: form.elements._form.value,
+      company: form.elements.company.value.trim(),
+      goals: chosen.map((g) => (g === 'Другое' && other ? 'Другое: ' + other : g)).join(', '),
+      budget: form.elements.budget.value.trim(),
+      geo: form.elements.geo.value.trim(),
+      site: form.elements.site.value.trim(),
+      social: form.elements.social.value.trim(),
+      contact: form.elements.contact.value.trim(),
+      department: form.elements.department.value,
+      page: location.pathname,
+    };
+
+    const endpoint = form.dataset.endpoint || '';
+    if (!endpoint) {
+      track('form_blocked', { form: 'brief' });
+      note.className = 'form-note error';
+      note.innerHTML = 'Отправка брифа пока не подключена. Напишите нам в '
+        + TELEGRAM_LINK + ' — ответим сразу.';
+      return;
+    }
+
+    button.disabled = true;
+    buttonText.textContent = 'Отправляем…';
+    note.className = 'form-note';
+    note.textContent = 'Отправляем бриф…';
+
+    try {
+      await postLead(endpoint, payload);
+      form.reset();
+      syncOther();
+      track('generate_lead', { method: 'brief' });
+      buttonText.textContent = 'Отправлено ✓';
+      note.className = 'form-note success';
+      note.textContent = 'Бриф принят. Вернёмся с предложением в течение рабочего дня.';
+    } catch (error) {
+      track('form_error', { form: 'brief' });
+      buttonText.textContent = 'Отправить бриф';
+      note.className = 'form-note error';
+      note.innerHTML = 'Не удалось отправить бриф. Напишите в ' + TELEGRAM_LINK
+        + ' или позвоните нам.';
+    } finally {
+      button.disabled = false;
+      setTimeout(() => {
+        buttonText.textContent = 'Отправить бриф';
+        note.className = 'form-note';
+        note.innerHTML = defaultNote;
+      }, 8000);
+    }
+  });
+}
+
 // --- Форма заявки -----------------------------------------------------------
 
 function initContactForm() {
@@ -464,8 +613,8 @@ function initContactForm() {
       track('form_blocked');
       note.className = 'form-note error';
       note.innerHTML =
-        'Отправка формы пока не подключена. Напишите нам в ' +
-        '<a href="' + TELEGRAM_URL + '" target="_blank" rel="noopener">Telegram</a> — ответим сразу.';
+        'Отправка формы пока не подключена. Напишите нам в '
+        + TELEGRAM_LINK + ' — ответим сразу.';
       return;
     }
 
@@ -478,12 +627,7 @@ function initContactForm() {
       const payload = Object.fromEntries(new FormData(form));
       payload.page = location.pathname; // видно, с какой страницы пришла заявка
 
-      const response = await fetch(endpoint, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
-      });
-      if (!response.ok) throw new Error('HTTP ' + response.status);
+      await postLead(endpoint, payload);
 
       form.reset();
       track('generate_lead', { method: 'form' });
@@ -495,9 +639,8 @@ function initContactForm() {
       buttonText.textContent = 'Отправить заявку';
       note.className = 'form-note error';
       note.innerHTML =
-        'Не удалось отправить заявку. Напишите в ' +
-        '<a href="' + TELEGRAM_URL + '" target="_blank" rel="noopener">Telegram</a> ' +
-        'или позвоните нам.';
+        'Не удалось отправить заявку. Напишите в ' + TELEGRAM_LINK
+        + ' или позвоните нам.';
     } finally {
       button.disabled = false;
       setTimeout(() => {

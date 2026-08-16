@@ -1,0 +1,90 @@
+<section class="brief" id="brief" aria-labelledby="brief-title">
+  <div class="section-inner">
+    <div class="section-head">
+      <span class="section-label">{{ brief.label }}</span>
+      <h2 id="brief-title">{{ brief.title }}</h2>
+      <p>{{ brief.lead }}</p>
+    </div>
+
+    <form class="brief-form" id="briefForm" novalidate data-endpoint="{{ formEndpoint }}">
+      <input type="hidden" name="_form" value="Бриф — контекстная реклама">
+
+      <div class="brief-row">
+        <label for="brief-company">Название компании <span class="req" aria-hidden="true">*</span></label>
+        <input type="text" id="brief-company" name="company" required
+               placeholder="Как называется ваш бизнес" aria-describedby="err-company">
+        <span class="field-error" id="err-company" hidden></span>
+      </div>
+
+      <fieldset class="brief-row brief-goals" aria-describedby="err-goals">
+        <legend>Цель рекламной кампании <span class="req" aria-hidden="true">*</span></legend>
+        <p class="brief-hint">Можно выбрать несколько</p>
+        <div class="brief-checks">
+          {{# brief.goals }}<label class="brief-check">
+            <input type="checkbox" name="goals" value="{{ . }}">
+            <span>{{ . }}</span>
+          </label>
+          {{/ brief.goals }}
+          <label class="brief-check">
+            <input type="checkbox" name="goals" value="Другое" id="brief-goal-other"
+                   aria-controls="brief-goal-other-text">
+            <span>Другое</span>
+          </label>
+        </div>
+        <input type="text" id="brief-goal-other-text" name="goal_other" hidden
+               placeholder="Опишите цель своими словами">
+        <span class="field-error" id="err-goals" hidden></span>
+      </fieldset>
+
+      <div class="brief-row">
+        <label for="brief-budget">Месячный бюджет <span class="req" aria-hidden="true">*</span></label>
+        <input type="text" id="brief-budget" name="budget" required inputmode="numeric"
+               placeholder="от 3 000 000 сум" aria-describedby="err-budget">
+        <span class="field-error" id="err-budget" hidden></span>
+      </div>
+
+      <div class="brief-row">
+        <label for="brief-geo">География рекламы <span class="req" aria-hidden="true">*</span></label>
+        <!-- Список подсказок, но поле остаётся обычным: можно выбрать город
+             из выпадающего списка, а можно вписать своё. -->
+        <input type="text" id="brief-geo" name="geo" required list="brief-geo-options"
+               placeholder="Ташкент, Самарканд, весь Узбекистан…" aria-describedby="err-geo">
+        <datalist id="brief-geo-options">
+          {{# brief.geo }}<option value="{{ . }}"></option>
+          {{/ brief.geo }}
+        </datalist>
+        <span class="field-error" id="err-geo" hidden></span>
+      </div>
+
+      <div class="brief-row">
+        <label for="brief-site">Текущий сайт <span class="label-optional">— если есть</span></label>
+        <input type="text" id="brief-site" name="site" placeholder="primer.uz">
+      </div>
+
+      <div class="brief-row">
+        <label for="brief-social">Ссылки на соцсети <span class="label-optional">— если есть</span></label>
+        <input type="text" id="brief-social" name="social" placeholder="Инстаграм или телеграм">
+      </div>
+
+      <div class="brief-row">
+        <label for="brief-contact">Как с вами связаться <span class="req" aria-hidden="true">*</span></label>
+        <input type="text" id="brief-contact" name="contact" required autocomplete="tel"
+               placeholder="+998 __ ___-__-__ или @username" aria-describedby="err-contact">
+        <span class="field-error" id="err-contact" hidden></span>
+      </div>
+
+      <!-- Приманка для спам-ботов: человек этого поля не видит. -->
+      <div class="form-honeypot" aria-hidden="true">
+        <label for="brief-extra">Отдел</label>
+        <input type="text" id="brief-extra" name="department" tabindex="-1" autocomplete="off">
+      </div>
+
+      <div class="brief-submit">
+        <button type="submit" class="btn btn-primary">
+          <span class="btn-text">{{ brief.submit }}</span>
+        </button>
+        <p class="form-note" id="briefNote" role="status">{{ brief.note }}</p>
+      </div>
+    </form>
+  </div>
+</section>

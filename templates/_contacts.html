@@ -51,10 +51,12 @@
                     placeholder="Расскажите коротко о задаче"></textarea>
         </div>
         <!-- Приманка для спам-ботов: человек этого поля не видит, бот заполняет
-             все поля подряд. Заполненное поле — признак робота. -->
+             все поля подряд. Заполненное поле — признак робота. Имя поля
+             общее для всех форм сайта и не совпадает ни с одним настоящим:
+             в брифе, например, «company» — это название компании клиента. -->
         <div class="form-honeypot" aria-hidden="true">
-          <label for="field-company">Компания</label>
-          <input type="text" id="field-company" name="company" tabindex="-1" autocomplete="off">
+          <label for="field-department">Отдел</label>
+          <input type="text" id="field-department" name="department" tabindex="-1" autocomplete="off">
         </div>
         <button type="submit" class="btn btn-primary btn-block">
           <span class="btn-text">Отправить заявку</span>

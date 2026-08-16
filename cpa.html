@@ -42,7 +42,7 @@
 <link rel="shortcut icon" href="favicon.ico">
 <link rel="apple-touch-icon" sizes="180x180" href="assets/icons/apple-touch-icon.png">
 
-<link rel="stylesheet" href="css/styles.css?v=c73ca94b">
+<link rel="stylesheet" href="css/styles.css?v=d67d1fd3">
 <!-- Шрифты лежат на своём домене: без обращения к Google на каждой
      загрузке. Предзагружаем ровно те наборы, что нужны первому экрану.
      Michroma — логотип в шапке, латиница JetBrains Mono — номер телефона и
@@ -442,6 +442,8 @@
   </section>
 
 
+
+
   <section class="related-services" aria-labelledby="related-title">
     <div class="section-inner">
       <div class="related-services-head"><h2 id="related-title">Другие услуги</h2></div>
@@ -519,10 +521,12 @@
                     placeholder="Расскажите коротко о задаче"></textarea>
         </div>
         <!-- Приманка для спам-ботов: человек этого поля не видит, бот заполняет
-             все поля подряд. Заполненное поле — признак робота. -->
+             все поля подряд. Заполненное поле — признак робота. Имя поля
+             общее для всех форм сайта и не совпадает ни с одним настоящим:
+             в брифе, например, «company» — это название компании клиента. -->
         <div class="form-honeypot" aria-hidden="true">
-          <label for="field-company">Компания</label>
-          <input type="text" id="field-company" name="company" tabindex="-1" autocomplete="off">
+          <label for="field-department">Отдел</label>
+          <input type="text" id="field-department" name="department" tabindex="-1" autocomplete="off">
         </div>
         <button type="submit" class="btn btn-primary btn-block">
           <span class="btn-text">Отправить заявку</span>
@@ -607,7 +611,7 @@
   </div>
 </nav>
 
-<script src="js/main.js?v=a49cf4fb" defer></script>
+<script src="js/main.js?v=95664528" defer></script>
 
 </body>
 </html>

@@ -1662,6 +1662,88 @@ section:not(.hero) {
   flex-shrink: 0;
 }
 
+/* ---------- бриф ---------- */
+
+.brief-form {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 22px 26px;
+  max-width: 860px;
+}
+.brief-row { display: flex; flex-direction: column; gap: 8px; border: 0; padding: 0; margin: 0; }
+.brief-row > label,
+.brief-row legend {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.03em;
+  color: var(--text-dim);
+  padding: 0;
+}
+.brief-row .req { color: var(--accent); }
+.brief-hint { font-size: 12px; color: var(--text-faint); margin-top: -2px; }
+
+.brief-row input[type="text"] {
+  width: 100%;
+  padding: 12px 14px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  color: var(--text);
+  font: inherit;
+  font-size: 14px;
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+.brief-row input[type="text"]::placeholder { color: var(--text-faint); }
+.brief-row input[type="text"]:focus {
+  outline: none;
+  border-color: var(--accent);
+  background: rgba(255, 255, 255, 0.05);
+}
+.brief-row input[aria-invalid="true"] { border-color: var(--danger); }
+
+/* Цели занимают всю ширину: вариантов пять, в половину они переносятся
+   некрасиво и колонки расходятся по высоте. */
+.brief-goals { grid-column: 1 / -1; }
+.brief-checks { display: flex; flex-wrap: wrap; gap: 8px; }
+.brief-check {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 13px;
+  color: var(--text-dim);
+  cursor: pointer;
+  transition: border-color 0.2s ease, color 0.2s ease, background-color 0.2s ease;
+}
+.brief-check:hover { border-color: var(--border-strong); color: var(--text); }
+.brief-check input { accent-color: var(--accent); width: 15px; height: 15px; cursor: pointer; }
+.brief-check:has(input:checked) {
+  border-color: var(--accent-line);
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+.brief-check:has(input:focus-visible) { outline: 2px solid var(--accent); outline-offset: 2px; }
+#brief-goal-other-text { margin-top: 10px; }
+
+.brief-submit {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  flex-wrap: wrap;
+  margin-top: 4px;
+}
+.brief-submit .form-note { margin: 0; flex: 1; min-width: 220px; }
+
+@media (max-width: 720px) {
+  .brief-form { grid-template-columns: 1fr; }
+  .brief-submit .btn { width: 100%; }
+  /* Палец промахивается по зоне ниже 44px — на телефоне добираем высоту. */
+  .brief-check { padding: 12px 14px; }
+}
+
 /* ---------- другие услуги ---------- */
 
 /* Селектор с тегом не случаен: общее правило section:not(.hero) специфичнее
