@@ -13,7 +13,23 @@
     </a>
 
     <nav class="main-nav" id="mainNav" aria-label="Основная навигация">
-      <a href="{{ navPrefix }}#services" class="nav-link"><span class="nav-index" aria-hidden="true">01</span>Услуги</a>
+      <!-- «Услуги» остаётся обычной ссылкой на раздел, а список раскрывает
+           отдельная кнопка: так пункт работает и мышкой, и с клавиатуры,
+           и не превращается в ловушку, которую нельзя просто нажать. -->
+      <div class="nav-item">
+        <a href="{{ navPrefix }}#services" class="nav-link"><span class="nav-index" aria-hidden="true">01</span>Услуги</a>
+        <button type="button" class="nav-sub-toggle" aria-expanded="false" aria-controls="navServices">
+          <span class="visually-hidden">Показать список услуг</span>
+          <svg viewBox="0 0 24 24" width="12" height="12" aria-hidden="true" focusable="false"><path fill="currentColor" d="M7 10l5 5 5-5z"/></svg>
+        </button>
+        <div class="nav-sub" id="navServices">
+          {{# services }}<a href="{{ url }}" class="nav-sub-link">
+            <span class="nav-sub-ico" aria-hidden="true">{{& iconSvgSm }}</span>
+            {{ title }}
+          </a>
+          {{/ services }}
+        </div>
+      </div>
       <a href="{{ navPrefix }}#process" class="nav-link"><span class="nav-index" aria-hidden="true">02</span>Процесс</a>
       <a href="{{ navPrefix }}#clients" class="nav-link"><span class="nav-index" aria-hidden="true">03</span>Клиенты</a>
       <a href="{{ navPrefix }}#faq" class="nav-link"><span class="nav-index" aria-hidden="true">04</span>Вопросы</a>

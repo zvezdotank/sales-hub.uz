@@ -23,7 +23,43 @@ document.addEventListener('DOMContentLoaded', () => {
   initAnalytics();
   initFaq();
   initWorksFilter();
+  initNavSubmenu();
 });
+
+// --- Список услуг в шапке ---------------------------------------------------
+// Мышкой список раскрывается наведением, это делает CSS. Здесь — то, чего
+// наведением не сделать: клавиатура и касание.
+
+function initNavSubmenu() {
+  const item = document.querySelector('.nav-item');
+  const toggle = item && item.querySelector('.nav-sub-toggle');
+  if (!toggle) return;
+
+  const setOpen = (open) => {
+    toggle.setAttribute('aria-expanded', String(open));
+    item.classList.toggle('is-open', open);
+  };
+
+  toggle.addEventListener('click', () => {
+    setOpen(toggle.getAttribute('aria-expanded') !== 'true');
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key !== 'Escape' || toggle.getAttribute('aria-expanded') !== 'true') return;
+    setOpen(false);
+    toggle.focus();
+  });
+
+  document.addEventListener('click', (e) => {
+    if (!item.contains(e.target)) setOpen(false);
+  });
+
+  // Уход фокуса за пределы пункта закрывает список — иначе он оставался бы
+  // раскрытым, пока человек табом уже ушёл дальше по странице.
+  item.addEventListener('focusout', (e) => {
+    if (!item.contains(e.relatedTarget)) setOpen(false);
+  });
+}
 
 // --- Фильтр работ по направлению --------------------------------------------
 
