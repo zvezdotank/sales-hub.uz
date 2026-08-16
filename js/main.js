@@ -22,7 +22,51 @@ document.addEventListener('DOMContentLoaded', () => {
   initSchedule();
   initAnalytics();
   initFaq();
+  initWorksFilter();
 });
+
+// --- Фильтр работ по направлению --------------------------------------------
+
+function initWorksFilter() {
+  const bar = document.querySelector('.works-filter');
+  const grid = document.querySelector('.works-grid');
+  if (!bar || !grid) return;
+
+  const cards = [...grid.querySelectorAll('.work')];
+  const buttons = [...bar.querySelectorAll('.works-filter-btn')];
+  const status = document.getElementById('works-count');
+
+  // Кнопки отрисованы скрытыми: без скрипта они бы ничего не делали.
+  bar.hidden = false;
+  // С этого момента ступенчатым сдвигом карточек управляет скрипт, а не CSS.
+  grid.classList.add('js');
+
+  const apply = (value) => {
+    let shown = 0;
+    cards.forEach((card) => {
+      const visible = !value || card.dataset.category === value;
+      card.hidden = !visible;
+      // Считаем по видимым, иначе после отбора зигзаг сбивается.
+      card.classList.toggle('is-low', visible && shown % 2 === 1);
+      if (visible) shown += 1;
+    });
+    if (status) {
+      status.textContent = value
+        ? `${value}: показано работ — ${shown}`
+        : `Показаны все работы — ${shown}`;
+    }
+  };
+
+  bar.addEventListener('click', (e) => {
+    const btn = e.target.closest('.works-filter-btn');
+    if (!btn) return;
+    buttons.forEach((b) => b.setAttribute('aria-pressed', String(b === btn)));
+    apply(btn.dataset.filter);
+    track('portfolio_filter', { category: btn.dataset.filter || 'all' });
+  });
+
+  apply('');
+}
 
 // --- Вопросы и ответы -------------------------------------------------------
 

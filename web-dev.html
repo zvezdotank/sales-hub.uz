@@ -42,7 +42,7 @@
 <link rel="shortcut icon" href="favicon.ico">
 <link rel="apple-touch-icon" sizes="180x180" href="assets/icons/apple-touch-icon.png">
 
-<link rel="stylesheet" href="css/styles.css?v=c35225ca">
+<link rel="stylesheet" href="css/styles.css?v=e9137c8a">
 <!-- Шрифты лежат на своём домене: без обращения к Google на каждой
      загрузке. Предзагружаем ровно те наборы, что нужны первому экрану.
      Michroma — логотип в шапке, латиница JetBrains Mono — номер телефона и
@@ -362,8 +362,29 @@
         <p>Каждый кадр — страница целиком, сверху донизу. Пролистайте её прямо здесь или откройте сайт вживую.</p>
       </div>
 
+      
+      <!-- Кнопки скрыты до запуска скрипта: без него фильтровать нечем, а
+           мёртвые кнопки хуже, чем их отсутствие. Все работы при этом видны. -->
+      <div class="works-filter" role="group" aria-label="Фильтр работ по направлению" hidden>
+        <button type="button" class="works-filter-btn" data-filter="" aria-pressed="true">
+          Все<span class="works-filter-n">6</span>
+        </button>
+        <button type="button" class="works-filter-btn" data-filter="Услуги" aria-pressed="false">
+          Услуги<span class="works-filter-n">2</span>
+        </button>
+        <button type="button" class="works-filter-btn" data-filter="Развлечения" aria-pressed="false">
+          Развлечения<span class="works-filter-n">2</span>
+        </button>
+        <button type="button" class="works-filter-btn" data-filter="Производство" aria-pressed="false">
+          Производство<span class="works-filter-n">2</span>
+        </button>
+        
+      </div>
+      <p class="visually-hidden" id="works-count" role="status"></p>
+      
+
       <div class="works-grid">
-        <article class="work" style="--shot-time: 5.9s">
+        <article class="work" data-category="Развлечения" style="--shot-time: 5.9s">
           <div class="work-screen">
             <div class="work-bar">
               <span class="work-led" aria-hidden="true"></span>
@@ -389,7 +410,7 @@
             <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true" focusable="false"><path fill="currentColor" d="M14 3v2h3.6l-9.3 9.3 1.4 1.4L19 6.4V10h2V3zM5 5h5V3H3v18h18v-7h-2v5H5z"/></svg>
           </a>
         </article>
-        <article class="work" style="--shot-time: 10.0s">
+        <article class="work" data-category="Производство" style="--shot-time: 10.0s">
           <div class="work-screen">
             <div class="work-bar">
               <span class="work-led" aria-hidden="true"></span>
@@ -415,7 +436,7 @@
             <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true" focusable="false"><path fill="currentColor" d="M14 3v2h3.6l-9.3 9.3 1.4 1.4L19 6.4V10h2V3zM5 5h5V3H3v18h18v-7h-2v5H5z"/></svg>
           </a>
         </article>
-        <article class="work" style="--shot-time: 7.4s">
+        <article class="work" data-category="Производство" style="--shot-time: 7.4s">
           <div class="work-screen">
             <div class="work-bar">
               <span class="work-led" aria-hidden="true"></span>
@@ -441,7 +462,7 @@
             <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true" focusable="false"><path fill="currentColor" d="M14 3v2h3.6l-9.3 9.3 1.4 1.4L19 6.4V10h2V3zM5 5h5V3H3v18h18v-7h-2v5H5z"/></svg>
           </a>
         </article>
-        <article class="work" style="--shot-time: 10.6s">
+        <article class="work" data-category="Развлечения" style="--shot-time: 10.6s">
           <div class="work-screen">
             <div class="work-bar">
               <span class="work-led" aria-hidden="true"></span>
@@ -467,7 +488,7 @@
             <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true" focusable="false"><path fill="currentColor" d="M14 3v2h3.6l-9.3 9.3 1.4 1.4L19 6.4V10h2V3zM5 5h5V3H3v18h18v-7h-2v5H5z"/></svg>
           </a>
         </article>
-        <article class="work" style="--shot-time: 12.0s">
+        <article class="work" data-category="Услуги" style="--shot-time: 12.0s">
           <div class="work-screen">
             <div class="work-bar">
               <span class="work-led" aria-hidden="true"></span>
@@ -489,6 +510,32 @@
             
           </ul>
           <a class="work-link" href="http://kanalizaciya.uz" target="_blank" rel="noopener">
+            Открыть сайт
+            <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true" focusable="false"><path fill="currentColor" d="M14 3v2h3.6l-9.3 9.3 1.4 1.4L19 6.4V10h2V3zM5 5h5V3H3v18h18v-7h-2v5H5z"/></svg>
+          </a>
+        </article>
+        <article class="work" data-category="Услуги" style="--shot-time: 7.2s">
+          <div class="work-screen">
+            <div class="work-bar">
+              <span class="work-led" aria-hidden="true"></span>
+              <span class="work-domain">avariynaya.uz</span>
+              <span class="work-hint" aria-hidden="true">пролистать</span>
+            </div>
+            <div class="work-glass" tabindex="0" role="region" aria-label="Сайт avariynaya.uz: страница целиком, прокручивается">
+              <picture><source type="image/avif" srcset="assets/img/portfolio/avariynaya-shot.avif"><source type="image/webp" srcset="assets/img/portfolio/avariynaya-shot.webp"><img src="assets/img/portfolio/avariynaya-shot.webp" alt="Сайт avariynaya.uz — страница целиком" width="640" height="2870" class="work-shot" loading="lazy" decoding="async"></picture>
+            </div>
+          </div>
+
+          <p class="work-kind">Аварийная служба</p>
+          <h3 class="work-name">Аварийная</h3>
+          <p class="work-note">Круглосуточный выезд на засоры: гидродинамика, видеодиагностика, откачка септиков. Оплата после работы.</p>
+          <ul class="work-tags">
+            <li>Выезд 24/7</li>
+            <li>Приезд 40 минут</li>
+            <li>Гарантия</li>
+            
+          </ul>
+          <a class="work-link" href="https://avariynaya.uz" target="_blank" rel="noopener">
             Открыть сайт
             <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true" focusable="false"><path fill="currentColor" d="M14 3v2h3.6l-9.3 9.3 1.4 1.4L19 6.4V10h2V3zM5 5h5V3H3v18h18v-7h-2v5H5z"/></svg>
           </a>
@@ -803,7 +850,7 @@
   </div>
 </nav>
 
-<script src="js/main.js?v=ccf87ca3" defer></script>
+<script src="js/main.js?v=f1f4c0b5" defer></script>
 
 </body>
 </html>

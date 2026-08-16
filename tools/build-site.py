@@ -350,12 +350,13 @@ def picture(stem: str, preset: str, alt: str, cls: str, *, eager: bool = False, 
 
 
 def portfolio(sv: dict) -> "dict | None":
-    """Блок работ: к каждой добавляет снимок сайта и время прокрутки кадра."""
+    """Блок работ: снимок сайта, время прокрутки кадра и кнопки фильтра."""
     block = sv.get("portfolio")
     if not block:
         return None
 
     items = []
+    filters = None
     for it in block["items"]:
         slug = it["slug"]
         if slug not in SHOTS:
@@ -380,7 +381,25 @@ def portfolio(sv: dict) -> "dict | None":
                 ),
             }
         )
-    return {**block, "items": items}
+
+    # Кнопки фильтра строим по данным, а не руками: направление попадает в
+    # список, только если в нём есть хотя бы одна работа. Иначе на сайте
+    # висела бы вкладка, которая ничего не показывает. Порядок задаётся в
+    # site.json; направления, которых там нет, добавляются в конец, чтобы
+    # работа не выпала из фильтра по забывчивости.
+    order = list(block.get("filters") or [])
+    used = [it.get("category") for it in items if it.get("category")]
+    order += [c for c in used if c not in order]
+    present = [c for c in order if c in used]
+
+    if len(present) > 1:
+        filters = [{"name": "Все", "value": "", "count": len(items), "pressed": "true"}]
+        filters += [
+            {"name": c, "value": c, "count": used.count(c), "pressed": "false"}
+            for c in present
+        ]
+
+    return {**block, "items": items, "filters": filters}
 
 
 # --------------------------------------------------------------------- сборка
