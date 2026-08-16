@@ -608,6 +608,20 @@
             "category": "Развлечения"
           },
           {
+            "slug": "m-brokers",
+            "name": "М-Брокерс",
+            "domain": "m-brokers.uz",
+            "url": "https://m-brokers.uz",
+            "category": "Услуги",
+            "kind": "Таможенный брокер",
+            "note": "Таможенный представитель в реестре ГТК: разбор рисков поставки, услуги оформления и сертификации, лицензии на виду.",
+            "tags": [
+              "Реестр ГТК",
+              "Расчёт до сделки",
+              "B2B"
+            ]
+          },
+          {
             "slug": "kanalizaciya",
             "name": "Kanalizaciya.uz",
             "domain": "kanalizaciya.uz",
