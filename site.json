@@ -557,6 +557,19 @@
             ]
           },
           {
+            "slug": "mobil-oil",
+            "name": "Mobil Uzbekistan",
+            "domain": "mobil-oil.uz",
+            "url": "https://mobil-oil.uz",
+            "kind": "Каталог масел",
+            "note": "Оптовые поставки масел Mobil: подбор по марке машины и допуску, склад с ценами и наличием, документы на каждую партию.",
+            "tags": [
+              "Подбор по допуску",
+              "Склад с ценами",
+              "B2B"
+            ]
+          },
+          {
             "slug": "v-travel",
             "name": "V-travel",
             "domain": "v-travel.uz",

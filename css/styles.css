@@ -1186,8 +1186,8 @@ section:not(.hero) {
 
 .works-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 30px 22px;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 28px 18px;
   align-items: start;
 }
 
@@ -1195,7 +1195,7 @@ section:not(.hero) {
    ломает эту линию — получается стопка распечаток, разложенных на столе. */
 .works-grid .work:nth-child(even) { margin-top: 42px; }
 
-.work { --shot-h: 360px; }
+.work { --shot-h: 340px; }
 
 .work-screen {
   position: relative;
@@ -1341,6 +1341,15 @@ section:not(.hero) {
   transition: color 0.25s ease, border-color 0.25s ease;
 }
 .work-link:hover, .work-link:focus-visible { color: var(--accent); border-color: var(--accent); }
+
+/* Ряд из пяти держится только на широком экране: у́же карточки становятся
+   такими тесными, что подпись рассыпается на семь строк. Ступенька до трёх
+   стоит здесь, а не в общем блоке адаптива, — иначе она перебила бы правила
+   для планшета и телефона, которые идут ниже по файлу. */
+@media (max-width: 1240px) {
+  .works-grid { grid-template-columns: repeat(3, 1fr); gap: 34px 22px; }
+  .work { --shot-h: 400px; }
+}
 
 /* ---------- тариф ---------- */
 
