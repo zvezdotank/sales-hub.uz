@@ -12,11 +12,11 @@
       <div class="brief-row">
         <label for="brief-company">Название компании <span class="req" aria-hidden="true">*</span></label>
         <input type="text" id="brief-company" name="company" required
-               placeholder="Как называется ваш бизнес" aria-describedby="err-company">
-        <span class="field-error" id="err-company" hidden></span>
+               placeholder="Как называется ваш бизнес" aria-describedby="brief-err-company">
+        <span class="field-error" id="brief-err-company" hidden></span>
       </div>
 
-      <fieldset class="brief-row brief-goals" aria-describedby="err-goals">
+      <fieldset class="brief-row brief-goals" aria-describedby="brief-err-goals">
         <legend>Цель рекламной кампании <span class="req" aria-hidden="true">*</span></legend>
         <p class="brief-hint">Можно выбрать несколько</p>
         <div class="brief-checks">
@@ -32,15 +32,16 @@
           </label>
         </div>
         <input type="text" id="brief-goal-other-text" name="goal_other" hidden
+               aria-label="Своя формулировка цели"
                placeholder="Опишите цель своими словами">
-        <span class="field-error" id="err-goals" hidden></span>
+        <span class="field-error" id="brief-err-goals" hidden></span>
       </fieldset>
 
       <div class="brief-row">
         <label for="brief-budget">Месячный бюджет <span class="req" aria-hidden="true">*</span></label>
         <input type="text" id="brief-budget" name="budget" required inputmode="numeric"
-               placeholder="от 3 000 000 сум" aria-describedby="err-budget">
-        <span class="field-error" id="err-budget" hidden></span>
+               placeholder="от 3 000 000 сум" aria-describedby="brief-err-budget">
+        <span class="field-error" id="brief-err-budget" hidden></span>
       </div>
 
       <div class="brief-row">
@@ -48,12 +49,12 @@
         <!-- Список подсказок, но поле остаётся обычным: можно выбрать город
              из выпадающего списка, а можно вписать своё. -->
         <input type="text" id="brief-geo" name="geo" required list="brief-geo-options"
-               placeholder="Ташкент, Самарканд, весь Узбекистан…" aria-describedby="err-geo">
+               placeholder="Ташкент, Самарканд, весь Узбекистан…" aria-describedby="brief-err-geo">
         <datalist id="brief-geo-options">
           {{# brief.geo }}<option value="{{ . }}"></option>
           {{/ brief.geo }}
         </datalist>
-        <span class="field-error" id="err-geo" hidden></span>
+        <span class="field-error" id="brief-err-geo" hidden></span>
       </div>
 
       <div class="brief-row">
@@ -69,8 +70,8 @@
       <div class="brief-row">
         <label for="brief-contact">Как с вами связаться <span class="req" aria-hidden="true">*</span></label>
         <input type="text" id="brief-contact" name="contact" required autocomplete="tel"
-               placeholder="+998 __ ___-__-__ или @username" aria-describedby="err-contact">
-        <span class="field-error" id="err-contact" hidden></span>
+               placeholder="+998 __ ___-__-__ или @username" aria-describedby="brief-err-contact">
+        <span class="field-error" id="brief-err-contact" hidden></span>
       </div>
 
       <!-- Приманка для спам-ботов: человек этого поля не видит. -->

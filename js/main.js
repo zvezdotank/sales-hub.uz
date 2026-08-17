@@ -500,7 +500,9 @@ function initBriefForm() {
   syncOther();
 
   const setError = (key, input, message) => {
-    const box = document.getElementById('err-' + key);
+    // Префикс не для красоты: в форме контактов на этой же странице
+    // есть свой err-contact, и без разделения ошибка уходила в чужое поле.
+    const box = document.getElementById('brief-err-' + key);
     if (box) {
       box.textContent = message || '';
       box.hidden = !message;
