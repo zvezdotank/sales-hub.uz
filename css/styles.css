@@ -202,28 +202,6 @@ button { font: inherit; color: inherit; }
   100% { opacity: 1; }
 }
 
-/* Свет в модуле: живой источник — медленное дыхание плюс нестабильность
-   на подъёме, как у работающей лампы под нагрузкой. */
-@keyframes reactor-pulse {
-  0%   { opacity: 0.72; }
-  9%   { opacity: 0.95; }
-  13%  { opacity: 0.66; }
-  16%  { opacity: 1; }
-  27%  { opacity: 0.84; }
-  31%  { opacity: 1; }
-  38%  { opacity: 0.6; }
-  41%  { opacity: 0.88; }
-  50%  { opacity: 1; }
-  58%  { opacity: 0.7; }
-  62%  { opacity: 0.93; }
-  67%  { opacity: 0.55; }
-  70%  { opacity: 1; }
-  81%  { opacity: 0.78; }
-  86%  { opacity: 1; }
-  93%  { opacity: 0.68; }
-  100% { opacity: 0.72; }
-}
-
 /* ---------- шапка ---------- */
 
 .site-header {
@@ -494,21 +472,6 @@ button { font: inherit; color: inherit; }
   object-position: center 40%;
   filter: saturate(1.05) contrast(1.04);
 }
-/* Свет изнутри модуля: отдельный слой поверх кадра, режим screen
-   подмешивает только светящиеся пиксели. Позиционирование совпадает
-   с основным изображением, потому что это тот же кадр. */
-.hero-glow-img {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center 40%;
-  mix-blend-mode: screen;
-  will-change: opacity;
-  animation: reactor-pulse 6.2s ease-in-out infinite;
-}
-
 .hero-photo::after {
   content: "";
   position: absolute;
@@ -2508,7 +2471,6 @@ a.contact-detail-v:hover { color: var(--accent); }
   .mission-dot { animation: none; }
   .service-tag, .info-card-badge { animation: none; text-shadow: 0 0 7px rgba(74, 222, 128, 0.45); }
   .status-dot, .dot-badge { animation: none; }
-  .hero-glow-img { animation: none; opacity: 0.85; }
   .service-card:hover, .client-item:hover, .related-card:hover, .btn-primary:hover {
     transform: none;
   }
