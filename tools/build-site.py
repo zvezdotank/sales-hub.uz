@@ -315,6 +315,7 @@ def portfolio_ld(s: dict, page: dict, works: dict) -> dict:
                 "name": page["h1"],
                 "description": page["metaDescription"],
                 "url": url,
+                "publisher": {"@id": f"{s['origin']}/#organization"},
                 "mainEntity": {
                     "@type": "ItemList",
                     "numberOfItems": len(works["items"]),
@@ -467,6 +468,8 @@ def portfolio_teaser(sv: dict, page_slug: str) -> "dict | None":
         "filters": None,
         "perPage": "",
         "more": more,
+        # У секции витрины есть свой h2, поэтому названия работ — h3.
+        "hTag": "h3",
     }
 
 
@@ -485,6 +488,9 @@ def portfolio_full(data: dict) -> "dict | None":
         "more": None,
         "total": len(items),
         "categories": len(cats),
+        # На отдельной странице над списком только h1, поэтому работы — h2:
+        # иначе в структуре страницы получался бы скачок с h1 сразу на h3.
+        "hTag": "h2",
     }
 
 

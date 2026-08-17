@@ -24,7 +24,7 @@
           </div>
 
           <p class="work-kind">{{ kind }}</p>
-          <h3 class="work-name">{{ name }}</h3>
+          <{{ portfolio.hTag }} class="work-name">{{ name }}</{{ portfolio.hTag }}>
           <p class="work-note">{{ note }}</p>
           <ul class="work-tags">
             {{# tags }}<li>{{ . }}</li>
