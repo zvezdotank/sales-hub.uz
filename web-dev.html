@@ -43,7 +43,7 @@
 <link rel="apple-touch-icon" sizes="180x180" href="assets/icons/apple-touch-icon.png">
 
 <link rel="stylesheet" href="css/fonts.css?v=09d074ec">
-<link rel="stylesheet" href="css/styles.css?v=61ba4c3f">
+<link rel="stylesheet" href="css/styles.css?v=635c88d9">
 <!-- Шрифты лежат на своём домене: без обращения к Google на каждой
      загрузке. Предзагружаем ровно те наборы, что нужны первому экрану.
      Michroma — логотип в шапке, латиница JetBrains Mono — номер телефона и
@@ -407,28 +407,9 @@
         <p>Каждый кадр — страница целиком, сверху донизу. Пролистайте её прямо здесь или откройте сайт вживую.</p>
       </div>
 
-      
-      <!-- Кнопки скрыты до запуска скрипта: без него фильтровать нечем, а
-           мёртвые кнопки хуже, чем их отсутствие. Все работы при этом видны. -->
-      <div class="works-filter" role="group" aria-label="Фильтр работ по направлению" hidden>
-        <button type="button" class="works-filter-btn" data-filter="" aria-pressed="true">
-          Все<span class="works-filter-n">7</span>
-        </button>
-        <button type="button" class="works-filter-btn" data-filter="Услуги" aria-pressed="false">
-          Услуги<span class="works-filter-n">3</span>
-        </button>
-        <button type="button" class="works-filter-btn" data-filter="Развлечения" aria-pressed="false">
-          Развлечения<span class="works-filter-n">2</span>
-        </button>
-        <button type="button" class="works-filter-btn" data-filter="Производство" aria-pressed="false">
-          Производство<span class="works-filter-n">2</span>
-        </button>
-        
-      </div>
-      <p class="visually-hidden" id="works-count" role="status"></p>
-      
 
-      <div class="works-grid">
+
+      <div class="works-grid" data-per-page="">
         <article class="work" data-category="Развлечения" style="--shot-time: 5.9s">
           <div class="work-screen">
             <div class="work-bar">
@@ -437,7 +418,7 @@
               <span class="work-hint" aria-hidden="true">пролистать</span>
             </div>
             <div class="work-glass" tabindex="0" role="region" aria-label="Сайт dosug.uz: страница целиком, прокручивается">
-              <picture><source type="image/avif" srcset="assets/img/portfolio/dosug-shot.avif"><source type="image/webp" srcset="assets/img/portfolio/dosug-shot.webp"><img src="assets/img/portfolio/dosug-shot.webp" alt="Сайт dosug.uz — страница целиком" width="640" height="2340" class="work-shot" loading="lazy" decoding="async"></picture>
+              <picture><source type="image/avif" srcset="assets/img/portfolio/dosug-shot.avif"><source type="image/webp" srcset="assets/img/portfolio/dosug-shot.webp"><img src="assets/img/portfolio/dosug-shot.webp" alt="Сайт dosug.uz — страница целиком" width="640" height="2361" class="work-shot" loading="lazy" decoding="async"></picture>
             </div>
           </div>
 
@@ -489,7 +470,7 @@
               <span class="work-hint" aria-hidden="true">пролистать</span>
             </div>
             <div class="work-glass" tabindex="0" role="region" aria-label="Сайт mobil-oil.uz: страница целиком, прокручивается">
-              <picture><source type="image/avif" srcset="assets/img/portfolio/mobil-oil-shot.avif"><source type="image/webp" srcset="assets/img/portfolio/mobil-oil-shot.webp"><img src="assets/img/portfolio/mobil-oil-shot.webp" alt="Сайт mobil-oil.uz — страница целиком" width="640" height="2964" class="work-shot" loading="lazy" decoding="async"></picture>
+              <picture><source type="image/avif" srcset="assets/img/portfolio/mobil-oil-shot.avif"><source type="image/webp" srcset="assets/img/portfolio/mobil-oil-shot.webp"><img src="assets/img/portfolio/mobil-oil-shot.webp" alt="Сайт mobil-oil.uz — страница целиком" width="640" height="2973" class="work-shot" loading="lazy" decoding="async"></picture>
             </div>
           </div>
 
@@ -585,7 +566,7 @@
             <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true" focusable="false"><path fill="currentColor" d="M14 3v2h3.6l-9.3 9.3 1.4 1.4L19 6.4V10h2V3zM5 5h5V3H3v18h18v-7h-2v5H5z"/></svg>
           </a>
         </article>
-        <article class="work" data-category="Услуги" style="--shot-time: 7.2s">
+        <article class="work" data-category="Услуги" style="--shot-time: 7.0s">
           <div class="work-screen">
             <div class="work-bar">
               <span class="work-led" aria-hidden="true"></span>
@@ -593,7 +574,7 @@
               <span class="work-hint" aria-hidden="true">пролистать</span>
             </div>
             <div class="work-glass" tabindex="0" role="region" aria-label="Сайт avariynaya.uz: страница целиком, прокручивается">
-              <picture><source type="image/avif" srcset="assets/img/portfolio/avariynaya-shot.avif"><source type="image/webp" srcset="assets/img/portfolio/avariynaya-shot.webp"><img src="assets/img/portfolio/avariynaya-shot.webp" alt="Сайт avariynaya.uz — страница целиком" width="640" height="2870" class="work-shot" loading="lazy" decoding="async"></picture>
+              <picture><source type="image/avif" srcset="assets/img/portfolio/avariynaya-shot.avif"><source type="image/webp" srcset="assets/img/portfolio/avariynaya-shot.webp"><img src="assets/img/portfolio/avariynaya-shot.webp" alt="Сайт avariynaya.uz — страница целиком" width="640" height="2780" class="work-shot" loading="lazy" decoding="async"></picture>
             </div>
           </div>
 
@@ -613,6 +594,19 @@
         </article>
         
       </div>
+
+
+
+
+      
+      <div class="works-more">
+        <a href="portfolio.html" class="btn btn-ghost">
+          Открыть портфолио целиком
+          <span class="works-more-n">7</span>
+          <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false"><path fill="currentColor" d="M8 5v14l11-7z"/></svg>
+        </a>
+      </div>
+      
     </div>
   </section>
 
@@ -879,6 +873,7 @@
       <a href="ad-accounts.html">Зачисление в рекламные кабинеты</a>
       <a href="telegram.html">Реклама в Telegram</a>
       
+      <a href="portfolio.html" class="footer-nav-extra">Портфолио сайтов</a>
     </nav>
 
     <div class="footer-contacts">
@@ -925,7 +920,7 @@
   </div>
 </nav>
 
-<script src="js/main.js?v=95664528" defer></script>
+<script src="js/main.js?v=6be0a88b" defer></script>
 
 </body>
 </html>

@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initSchedule();
   initAnalytics();
   initFaq();
-  initWorksFilter();
+  initWorks();
   initNavSubmenu();
   initBriefForm();
 });
@@ -62,47 +62,118 @@ function initNavSubmenu() {
   });
 }
 
-// --- Фильтр работ по направлению --------------------------------------------
+// --- Работы: фильтр и страницы ----------------------------------------------
+// Один обработчик на оба места: витрину на странице услуги и отдельную
+// страницу портфолио. Чем управлять — понимает по разметке: есть кнопки
+// фильтра, есть ли у сетки data-per-page.
+//
+// Разбивка на страницы здесь не только про удобство. Карточки за пределами
+// текущей страницы скрыты через hidden, а браузер не загружает картинки в
+// скрытых элементах — то есть снимки сайтов со второй страницы не весят
+// ничего, пока на неё не перешли.
 
-function initWorksFilter() {
-  const bar = document.querySelector('.works-filter');
+function initWorks() {
   const grid = document.querySelector('.works-grid');
-  if (!bar || !grid) return;
+  if (!grid) return;
 
   const cards = [...grid.querySelectorAll('.work')];
-  const buttons = [...bar.querySelectorAll('.works-filter-btn')];
+  const bar = document.querySelector('.works-filter');
+  const pager = document.getElementById('worksPager');
   const status = document.getElementById('works-count');
+  const perPage = parseInt(grid.dataset.perPage, 10) || 0;
+  if (!bar && !perPage) return;
 
-  // Кнопки отрисованы скрытыми: без скрипта они бы ничего не делали.
-  bar.hidden = false;
-  // С этого момента ступенчатым сдвигом карточек управляет скрипт, а не CSS.
+  // С этого момента ступенчатым сдвигом карточек управляет скрипт, а не CSS:
+  // правило «каждая вторая» считает и скрытые, и после отбора зигзаг сбился бы.
   grid.classList.add('js');
+  if (bar) bar.hidden = false;
 
-  const apply = (value) => {
-    let shown = 0;
-    cards.forEach((card) => {
-      const visible = !value || card.dataset.category === value;
-      card.hidden = !visible;
-      // Считаем по видимым, иначе после отбора зигзаг сбивается.
-      card.classList.toggle('is-low', visible && shown % 2 === 1);
-      if (visible) shown += 1;
+  let filter = '';
+  let page = 1;
+
+  const pageButton = (label, target, { current, disabled, title } = {}) => {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'works-page';
+    b.textContent = label;
+    b.dataset.page = String(target);
+    if (title) b.setAttribute('aria-label', title);
+    if (current) b.setAttribute('aria-current', 'page');
+    if (disabled) b.disabled = true;
+    return b;
+  };
+
+  const drawPager = (pages, shown, total) => {
+    if (!pager) return;
+    pager.hidden = pages < 2;
+    pager.replaceChildren();
+    if (pages < 2) return;
+
+    pager.append(pageButton('←', page - 1, { disabled: page === 1, title: 'Предыдущая страница' }));
+    for (let i = 1; i <= pages; i++) {
+      pager.append(pageButton(String(i), i, { current: i === page }));
+    }
+    pager.append(pageButton('→', page + 1, { disabled: page === pages, title: 'Следующая страница' }));
+
+    const info = document.createElement('span');
+    info.className = 'works-pager-info';
+    info.textContent = shown + ' из ' + total;
+    pager.append(info);
+  };
+
+  const render = () => {
+    const list = cards.filter((c) => !filter || c.dataset.category === filter);
+    const pages = perPage ? Math.max(1, Math.ceil(list.length / perPage)) : 1;
+    page = Math.min(Math.max(page, 1), pages);
+    const from = perPage ? (page - 1) * perPage : 0;
+    const shown = perPage ? list.slice(from, from + perPage) : list;
+
+    cards.forEach((c) => {
+      c.hidden = true;
+      c.classList.remove('is-low');
     });
+    shown.forEach((c, i) => {
+      c.hidden = false;
+      // Ступенька считается по видимым карточкам, а не по всем.
+      c.classList.toggle('is-low', i % 2 === 1);
+    });
+
+    drawPager(pages, shown.length, list.length);
+
     if (status) {
-      status.textContent = value
-        ? `${value}: показано работ — ${shown}`
-        : `Показаны все работы — ${shown}`;
+      status.textContent = (filter ? filter + ': ' : 'Все работы: ')
+        + 'показано ' + shown.length + ' из ' + list.length;
     }
   };
 
-  bar.addEventListener('click', (e) => {
-    const btn = e.target.closest('.works-filter-btn');
-    if (!btn) return;
-    buttons.forEach((b) => b.setAttribute('aria-pressed', String(b === btn)));
-    apply(btn.dataset.filter);
-    track('portfolio_filter', { category: btn.dataset.filter || 'all' });
-  });
+  if (bar) {
+    const buttons = [...bar.querySelectorAll('.works-filter-btn')];
+    bar.addEventListener('click', (e) => {
+      const btn = e.target.closest('.works-filter-btn');
+      if (!btn) return;
+      buttons.forEach((b) => b.setAttribute('aria-pressed', String(b === btn)));
+      filter = btn.dataset.filter;
+      page = 1; // иначе после смены направления можно попасть на пустую страницу
+      render();
+      track('portfolio_filter', { category: filter || 'all' });
+    });
+  }
 
-  apply('');
+  if (pager) {
+    pager.addEventListener('click', (e) => {
+      const btn = e.target.closest('.works-page');
+      if (!btn || btn.disabled) return;
+      page = Number(btn.dataset.page);
+      render();
+      // Возвращаем к началу списка: иначе после переключения человек стоит
+      // где-то в середине новой страницы и не понимает, что она сменилась.
+      const top = document.getElementById('works');
+      if (top) top.scrollIntoView({ block: 'start', behavior: prefersReducedMotion ? 'auto' : 'smooth' });
+      track('portfolio_page', { page: page });
+    });
+  }
+
+  render();
 }
 
 // --- Вопросы и ответы -------------------------------------------------------

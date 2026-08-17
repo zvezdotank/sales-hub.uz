@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+{{> _head }}
+</head>
+<body>
+
+{{> _header }}
+
+<main id="main">
+
+  <!-- Шапка без фотографии: страницу отправляют клиенту ссылкой, и она
+       должна открываться мгновенно. Фон здесь рисуют звёзды и градиент,
+       то есть ни одного лишнего килобайта до первого экрана. -->
+  <section class="page-hero page-hero--bare" aria-labelledby="page-title">
+    <div class="section-inner page-hero-content">
+      <nav class="breadcrumb" aria-label="Хлебные крошки">
+        <a href="index.html">Главная</a><span aria-hidden="true">/</span>
+        <a href="web-dev.html">Веб-разработка</a><span aria-hidden="true">/</span>
+        <span class="current" aria-current="page">Портфолио</span>
+      </nav>
+      <p class="mission-tag">
+        <span class="mission-dot" aria-hidden="true"></span>
+        {{ page.tag }}
+      </p>
+      <h1 class="page-hero-title" id="page-title">{{ page.h1 }}</h1>
+      <p class="page-hero-subtitle">{{ page.lead }}</p>
+
+      <ul class="works-stats">
+        <li><span class="works-stats-n">{{ portfolio.total }}</span> работ в портфолио</li>
+        <li><span class="works-stats-n">{{ portfolio.categories }}</span> направления бизнеса</li>
+        <li><span class="works-stats-n">100%</span> сайтов работают прямо сейчас</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="works works--page" id="works" aria-label="Работы">
+    <div class="section-inner">
+{{> _works }}
+    </div>
+  </section>
+
+{{> _contacts }}
+
+</main>
+
+{{> _footer }}
+</body>
+</html>

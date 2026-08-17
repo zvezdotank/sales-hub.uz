@@ -207,45 +207,17 @@
         <p>{{ portfolio.lead }}</p>
       </div>
 
-      {{? portfolio.filters }}
-      <!-- Кнопки скрыты до запуска скрипта: без него фильтровать нечем, а
-           мёртвые кнопки хуже, чем их отсутствие. Все работы при этом видны. -->
-      <div class="works-filter" role="group" aria-label="Фильтр работ по направлению" hidden>
-        {{# portfolio.filters }}<button type="button" class="works-filter-btn" data-filter="{{ value }}" aria-pressed="{{ pressed }}">
-          {{ name }}<span class="works-filter-n">{{ count }}</span>
-        </button>
-        {{/ portfolio.filters }}
-      </div>
-      <p class="visually-hidden" id="works-count" role="status"></p>
-      {{/ portfolio.filters }}
+{{> _works }}
 
-      <div class="works-grid">
-        {{# portfolio.items }}<article class="work" data-category="{{ category }}" style="--shot-time: {{ shotTime }}s">
-          <div class="work-screen">
-            <div class="work-bar">
-              <span class="work-led" aria-hidden="true"></span>
-              <span class="work-domain">{{ domain }}</span>
-              <span class="work-hint" aria-hidden="true">пролистать</span>
-            </div>
-            <div class="work-glass" tabindex="0" role="region" aria-label="Сайт {{ domain }}: страница целиком, прокручивается">
-              {{& shotPicture }}
-            </div>
-          </div>
-
-          <p class="work-kind">{{ kind }}</p>
-          <h3 class="work-name">{{ name }}</h3>
-          <p class="work-note">{{ note }}</p>
-          <ul class="work-tags">
-            {{# tags }}<li>{{ . }}</li>
-            {{/ tags }}
-          </ul>
-          <a class="work-link" href="{{ url }}" target="_blank" rel="noopener">
-            Открыть сайт
-            <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true" focusable="false"><path fill="currentColor" d="M14 3v2h3.6l-9.3 9.3 1.4 1.4L19 6.4V10h2V3zM5 5h5V3H3v18h18v-7h-2v5H5z"/></svg>
-          </a>
-        </article>
-        {{/ portfolio.items }}
+      {{? portfolio.more }}
+      <div class="works-more">
+        <a href="{{ portfolio.more.href }}" class="btn btn-ghost">
+          {{ portfolio.more.text }}
+          <span class="works-more-n">{{ portfolio.more.total }}</span>
+          <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false"><path fill="currentColor" d="M8 5v14l11-7z"/></svg>
+        </a>
       </div>
+      {{/ portfolio.more }}
     </div>
   </section>
 {{/ portfolio }}

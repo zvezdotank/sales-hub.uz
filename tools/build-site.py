@@ -292,6 +292,47 @@ def breadcrumb_ld(s: dict, sv: dict) -> dict:
     }
 
 
+def portfolio_ld(s: dict, page: dict, works: dict) -> dict:
+    """Разметка страницы портфолио: хлебные крошки плюс перечень работ.
+
+    Список отдаём как ItemList — поисковику видно, что на странице набор
+    отдельных сущностей, а не сплошной текст.
+    """
+    url = f"{s['origin']}/{page['slug']}.html"
+    return {
+        "@context": "https://schema.org",
+        "@graph": [
+            {
+                "@type": "BreadcrumbList",
+                "itemListElement": [
+                    {"@type": "ListItem", "position": 1, "name": "Главная", "item": s["origin"] + "/"},
+                    {"@type": "ListItem", "position": 2, "name": "Веб-разработка", "item": f"{s['origin']}/web-dev.html"},
+                    {"@type": "ListItem", "position": 3, "name": "Портфолио", "item": url},
+                ],
+            },
+            {
+                "@type": "CollectionPage",
+                "name": page["h1"],
+                "description": page["metaDescription"],
+                "url": url,
+                "mainEntity": {
+                    "@type": "ItemList",
+                    "numberOfItems": len(works["items"]),
+                    "itemListElement": [
+                        {
+                            "@type": "ListItem",
+                            "position": i + 1,
+                            "name": it["name"],
+                            "url": it["url"],
+                        }
+                        for i, it in enumerate(works["items"])
+                    ],
+                },
+            },
+        ],
+    }
+
+
 def faq_ld(faq: list) -> dict:
     return {
         "@context": "https://schema.org",
@@ -349,15 +390,10 @@ def picture(stem: str, preset: str, alt: str, cls: str, *, eager: bool = False, 
     )
 
 
-def portfolio(sv: dict) -> "dict | None":
-    """Блок работ: снимок сайта, время прокрутки кадра и кнопки фильтра."""
-    block = sv.get("portfolio")
-    if not block:
-        return None
-
-    items = []
-    filters = None
-    for it in block["items"]:
+def shot_cards(items: list) -> list:
+    """К каждой работе добавляет снимок сайта и время прокрутки кадра."""
+    out = []
+    for it in items:
         slug = it["slug"]
         if slug not in SHOTS:
             raise SystemExit(
@@ -366,7 +402,7 @@ def portfolio(sv: dict) -> "dict | None":
         w, h = SHOTS[slug]
         low, high, k = SHOT_TIME
         alt = f"Сайт {it['domain']} — страница целиком"
-        items.append(
+        out.append(
             {
                 **it,
                 "shotTime": f"{min(max(h / w * k, low), high):.1f}",
@@ -381,25 +417,75 @@ def portfolio(sv: dict) -> "dict | None":
                 ),
             }
         )
+    return out
 
-    # Кнопки фильтра строим по данным, а не руками: направление попадает в
-    # список, только если в нём есть хотя бы одна работа. Иначе на сайте
-    # висела бы вкладка, которая ничего не показывает. Порядок задаётся в
-    # site.json; направления, которых там нет, добавляются в конец, чтобы
-    # работа не выпала из фильтра по забывчивости.
-    order = list(block.get("filters") or [])
+
+def shot_filters(items: list, order: list) -> "list | None":
+    """Кнопки фильтра по данным.
+
+    Направление попадает в список, только если в нём есть хотя бы одна работа —
+    иначе на сайте висела бы вкладка, которая ничего не показывает. Порядок
+    задаётся в site.json; направления, которых там нет, встают в конец, чтобы
+    работа не выпала из фильтра по забывчивости. Одно направление — фильтр
+    не нужен вовсе.
+    """
     used = [it.get("category") for it in items if it.get("category")]
-    order += [c for c in used if c not in order]
+    order = list(order) + [c for c in used if c not in order]
     present = [c for c in order if c in used]
+    if len(present) < 2:
+        return None
+    return [{"name": "Все", "value": "", "count": len(items), "pressed": "true"}] + [
+        {"name": c, "value": c, "count": used.count(c), "pressed": "false"}
+        for c in present
+    ]
 
-    if len(present) > 1:
-        filters = [{"name": "Все", "value": "", "count": len(items), "pressed": "true"}]
-        filters += [
-            {"name": c, "value": c, "count": used.count(c), "pressed": "false"}
-            for c in present
-        ]
 
-    return {**block, "items": items, "filters": filters}
+def portfolio_teaser(sv: dict, page_slug: str) -> "dict | None":
+    """Витрина на странице услуги: несколько свежих работ и ссылка на полное
+    портфолио. Фильтра здесь нет намеренно — счётчики у кнопок показывали бы
+    число работ из урезанного списка и врали бы о размере портфолио.
+    """
+    block = sv.get("portfolio")
+    if not block:
+        return None
+    all_items = block["items"]
+    limit = block.get("limit") or len(all_items)
+    shown = all_items[:limit]
+    # Ссылку на полное портфолио показываем всегда, а не только когда витрина
+    # что-то отрезала: на отдельной странице есть фильтр и крупные кадры, и
+    # ссылку на неё нужно кому-то отправлять уже сегодня.
+    more = {
+        "href": f"{page_slug}.html",
+        "text": block.get("moreText", "Смотреть все работы")
+        if len(all_items) > len(shown)
+        else "Открыть портфолио целиком",
+        "total": len(all_items),
+    }
+    return {
+        **block,
+        "items": shot_cards(shown),
+        "filters": None,
+        "perPage": "",
+        "more": more,
+    }
+
+
+def portfolio_full(data: dict) -> "dict | None":
+    """Отдельная страница портфолио: все работы, фильтр и разбивка на страницы."""
+    block = next((sv.get("portfolio") for sv in data["services"] if sv.get("portfolio")), None)
+    if not block:
+        return None
+    items = block["items"]
+    cats = {it.get("category") for it in items if it.get("category")}
+    return {
+        **block,
+        "items": shot_cards(items),
+        "filters": shot_filters(items, block.get("filters") or []),
+        "perPage": data["portfolioPage"].get("perPage", 6),
+        "more": None,
+        "total": len(items),
+        "categories": len(cats),
+    }
 
 
 # --------------------------------------------------------------------- сборка
@@ -441,6 +527,8 @@ def main() -> int:
         "jsVersion": asset_version("js/main.js"),
         "contactsHref": "#contacts",
         "emailHref": "mailto:" + s["email"],
+        "portfolioHref": (data["portfolioPage"]["slug"] + ".html")
+        if data.get("portfolioPage") else "",
     }
 
     written = []
@@ -529,7 +617,7 @@ def main() -> int:
                     "contact-mars", "bg", "", "contact-bg-img", sizes="100vw"
                 ),
                 "isCpa": sv.get("custom") == "cpa",
-                "portfolio": portfolio(sv),
+                "portfolio": portfolio_teaser(sv, data["portfolioPage"]["slug"]),
                 "structuredData": "\n".join(
                     [jsonld(service_page_ld(s, sv)), jsonld(breadcrumb_ld(s, sv))]
                     + ([jsonld(faq_ld(sv["faq"]))] if sv.get("faq") else [])
@@ -537,6 +625,34 @@ def main() -> int:
             }
         )
         written.append((f"{sv['slug']}.html", render(tpl_service, ctx)))
+
+    # ---- страница портфолио
+    pp = data.get("portfolioPage")
+    works = portfolio_full(data) if pp else None
+    if works:
+        ctx = dict(base)
+        ctx.update(
+            {
+                "page": pp,
+                "portfolio": works,
+                "pageTitle": pp["h1"],
+                "metaTitle": pp["metaTitle"],
+                "metaDescription": pp["metaDescription"],
+                "canonical": f"{s['origin']}/{pp['slug']}.html",
+                "ogImage": f"{s['origin']}/assets/og/og-default.jpg",
+                "isIndex": False,
+                "homeHref": "index.html",
+                "navPrefix": "index.html",
+                "ctaTitle": pp.get("ctaTitle", "Обсудим ваш сайт?"),
+                "contactPicture": picture(
+                    "contact-mars", "bg", "", "contact-bg-img", sizes="100vw"
+                ),
+                "structuredData": jsonld(portfolio_ld(s, pp, works)),
+            }
+        )
+        written.append(
+            (f"{pp['slug']}.html", render((TPL / "portfolio.html").read_text(encoding="utf-8"), ctx))
+        )
 
     # ---- политика конфиденциальности
     priv = dict(base)
@@ -581,8 +697,11 @@ def main() -> int:
     for prefix in ('href="', 'src="', 'srcset="'):
         for asset in ("css/", "js/", "assets/", "favicon.ico"):
             page404 = page404.replace(prefix + asset, prefix + "/" + asset)
-    for svc in services:
-        page404 = page404.replace(f'href="{svc["slug"]}.html"', f'href="/{svc["slug"]}.html"')
+    slugs = [svc["slug"] for svc in services]
+    if data.get("portfolioPage"):
+        slugs.append(data["portfolioPage"]["slug"])
+    for slug in slugs:
+        page404 = page404.replace(f'href="{slug}.html"', f'href="/{slug}.html"')
     page404 = page404.replace('href="index.html"', 'href="/"').replace('href="privacy.html"', 'href="/privacy.html"')
     written.append(("404.html", page404))
 
@@ -601,6 +720,8 @@ def main() -> int:
     urls = [(s["origin"] + "/", "1.0", "weekly")] + [
         (f"{s['origin']}/{sv['slug']}.html", "0.8", "monthly") for sv in services
     ]
+    if data.get("portfolioPage"):
+        urls.append((f"{s['origin']}/{data['portfolioPage']['slug']}.html", "0.7", "monthly"))
     today = date.today().isoformat()
     body = "\n".join(
         f"  <url>\n    <loc>{u}</loc>\n    <lastmod>{today}</lastmod>\n"
