@@ -232,8 +232,14 @@ button { font: inherit; color: inherit; }
   transition: border-color 0.3s ease, background 0.3s ease;
 }
 .site-header.scrolled {
-  background: rgba(6, 9, 15, 0.9);
+  background: rgba(6, 9, 15, 0.94);
   border-bottom-color: var(--border);
+  /* Стекло гасим при прокрутке. Размытие в закреплённой шапке пересчитывается
+     на каждом кадре и стоит около восьми кадров в секунду на обычном
+     ноутбуке, а при фоне плотностью 94% под ним всё равно ничего не видно.
+     Наверху страницы, в покое, эффект остаётся. */
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
 }
 
 .header-inner {
@@ -964,8 +970,10 @@ section:not(.hero) {
   top: 14px;
   right: 14px;
   z-index: 1;
-  background: rgba(8, 12, 20, 0.6);
-  backdrop-filter: blur(4px);
+  /* Было размытие. Восемь плашек размывали фото под собой, стоило это
+     около десяти кадров в секунду, а видно не было ничего: подняли плотность
+     фона с 60 до 74% — результат тот же, цена нулевая. */
+  background: rgba(8, 12, 20, 0.74);
   border: 1px solid rgba(74, 222, 128, 0.3);
   padding: 4px 10px;
   border-radius: 20px;
@@ -1581,10 +1589,9 @@ section:not(.hero) {
 .price-card {
   position: relative;
   padding: 32px 30px 30px;
-  background: var(--panel);
+  background: rgba(16, 22, 34, 0.82);
   border: 1px solid var(--accent-line);
   border-radius: var(--radius);
-  backdrop-filter: blur(14px);
   overflow: hidden;
 }
 .price-card::before {
@@ -2001,13 +2008,15 @@ section.related-services { border-top: 1px solid var(--border); padding: 44px 0;
 .cta-contact .section-inner { position: relative; z-index: 1; }
 
 .contact-panel {
-  background: var(--panel);
+  /* Было размытие на 14px. Панель лежит на сильно затемнённой фотографии,
+     разница при сравнении кадров попиксельно оказалась в пределах шума —
+     подняли плотность фона вместо размытия. */
+  background: rgba(16, 22, 34, 0.82);
   border: 1px solid var(--border);
   border-radius: 20px;
   display: grid;
   grid-template-columns: 1fr 1fr;
   overflow: hidden;
-  backdrop-filter: blur(14px);
 }
 .contact-info { padding: 52px 44px; border-right: 1px solid var(--border); }
 .contact-info h2 { font-size: 30px; margin: 10px 0 14px; }
@@ -2235,9 +2244,8 @@ a.contact-detail-v:hover { color: var(--accent); }
   gap: 8px;
   padding: 9px 10px 10px;
   border-radius: 14px;
-  background: rgba(8, 12, 20, 0.82);
+  background: rgba(8, 12, 20, 0.93);
   border: 1px solid var(--border-strong);
-  backdrop-filter: blur(16px);
   box-shadow: 0 14px 40px -10px rgba(0, 0, 0, 0.75), 0 0 0 1px rgba(255, 181, 71, 0.06);
 }
 

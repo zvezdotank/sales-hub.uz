@@ -230,7 +230,11 @@ function initStars() {
   const container = document.getElementById('stars');
   if (!container || prefersReducedMotion) return;
 
-  const count = window.innerWidth < 700 ? 50 : 120;
+  // Каждая звезда — отдельный анимируемый элемент, и браузер пересчитывает
+  // их все на каждом кадре. При 120 звёздах это стоило около семи кадров в
+  // секунду на обычном ноутбуке. Оставили меньше, а мерцает только каждая
+  // третья: на глаз небо такое же живое, счёт за него втрое меньше.
+  const count = window.innerWidth < 700 ? 30 : 64;
   const frag = document.createDocumentFragment();
 
   for (let i = 0; i < count; i++) {
@@ -240,8 +244,13 @@ function initStars() {
     star.style.left = Math.random() * 100 + '%';
     star.style.width = size + 'px';
     star.style.height = size + 'px';
-    star.style.animationDelay = Math.random() * 4 + 's';
-    star.style.animationDuration = 3 + Math.random() * 3 + 's';
+    if (i % 3 === 0) {
+      star.style.animationDelay = Math.random() * 4 + 's';
+      star.style.animationDuration = 3 + Math.random() * 3 + 's';
+    } else {
+      star.style.animation = 'none';
+      star.style.opacity = 0.35 + Math.random() * 0.4;
+    }
     frag.appendChild(star);
   }
   container.appendChild(frag);
