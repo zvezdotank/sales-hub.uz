@@ -150,50 +150,56 @@ button { font: inherit; color: inherit; }
    мигает контакт, который барахлит. Равномерная синусоида читалась бы как
    «дыхание» и выглядела бы искусственно, поэтому шаг между провалами
    намеренно неровный. */
+/* Мерцание светодиода. Раньше здесь вместе с прозрачностью менялась
+   text-shadow — а изменение тени заставляет браузер перерисовывать пиксели на
+   каждом кадре, и так у восьми плашек одновременно. Теперь тень статичная, а
+   гаснет она сама: opacity применяется ко всей отрисовке элемента, свечение
+   тускнеет вместе с текстом. На глаз то же самое, считает видеокарта. */
 @keyframes led-glow {
-  0%   { opacity: 1;    text-shadow: 0 0 8px rgba(74, 222, 128, 0.55); }
-  5%   { opacity: 0.88; text-shadow: 0 0 5px rgba(74, 222, 128, 0.32); }
-  6%   { opacity: 0.34; text-shadow: 0 0 1px rgba(74, 222, 128, 0.06); }
-  8%   { opacity: 1;    text-shadow: 0 0 10px rgba(74, 222, 128, 0.72); }
-  12%  { opacity: 0.52; text-shadow: 0 0 2px rgba(74, 222, 128, 0.12); }
-  14%  { opacity: 1;    text-shadow: 0 0 9px rgba(74, 222, 128, 0.62); }
-  22%  { opacity: 0.84; text-shadow: 0 0 5px rgba(74, 222, 128, 0.30); }
-  24%  { opacity: 1;    text-shadow: 0 0 8px rgba(74, 222, 128, 0.55); }
-  33%  { opacity: 0.4;  text-shadow: 0 0 1px rgba(74, 222, 128, 0.08); }
-  35%  { opacity: 1;    text-shadow: 0 0 11px rgba(74, 222, 128, 0.78); }
-  44%  { opacity: 0.9;  text-shadow: 0 0 6px rgba(74, 222, 128, 0.38); }
-  46%  { opacity: 0.46; text-shadow: 0 0 1px rgba(74, 222, 128, 0.1); }
-  47%  { opacity: 0.95; text-shadow: 0 0 7px rgba(74, 222, 128, 0.5); }
-  48%  { opacity: 0.38; text-shadow: 0 0 1px rgba(74, 222, 128, 0.07); }
-  50%  { opacity: 1;    text-shadow: 0 0 12px rgba(74, 222, 128, 0.85); }
-  62%  { opacity: 0.86; text-shadow: 0 0 5px rgba(74, 222, 128, 0.34); }
-  64%  { opacity: 1;    text-shadow: 0 0 9px rgba(74, 222, 128, 0.6); }
-  73%  { opacity: 0.44; text-shadow: 0 0 1px rgba(74, 222, 128, 0.09); }
-  75%  { opacity: 1;    text-shadow: 0 0 10px rgba(74, 222, 128, 0.7); }
-  86%  { opacity: 0.8;  text-shadow: 0 0 4px rgba(74, 222, 128, 0.26); }
-  88%  { opacity: 1;    text-shadow: 0 0 8px rgba(74, 222, 128, 0.58); }
-  95%  { opacity: 0.5;  text-shadow: 0 0 2px rgba(74, 222, 128, 0.12); }
-  97%  { opacity: 1;    text-shadow: 0 0 9px rgba(74, 222, 128, 0.62); }
-  100% { opacity: 1;    text-shadow: 0 0 8px rgba(74, 222, 128, 0.55); }
+  0%   { opacity: 1; }
+  5%   { opacity: 0.88; }
+  6%   { opacity: 0.34; }
+  8%   { opacity: 1; }
+  12%  { opacity: 0.52; }
+  14%  { opacity: 1; }
+  22%  { opacity: 0.84; }
+  24%  { opacity: 1; }
+  33%  { opacity: 0.4; }
+  35%  { opacity: 1; }
+  44%  { opacity: 0.9; }
+  46%  { opacity: 0.46; }
+  47%  { opacity: 0.95; }
+  48%  { opacity: 0.38; }
+  50%  { opacity: 1; }
+  62%  { opacity: 0.86; }
+  64%  { opacity: 1; }
+  73%  { opacity: 0.44; }
+  75%  { opacity: 1; }
+  86%  { opacity: 0.8; }
+  88%  { opacity: 1; }
+  95%  { opacity: 0.5; }
+  97%  { opacity: 1; }
+  100% { opacity: 1; }
 }
 
 /* Точечный индикатор — тот же ритм, но светится ореолом, а не текстом. */
+/* То же для точки: box-shadow больше не анимируется. */
 @keyframes led-dot {
-  0%   { opacity: 1;    box-shadow: 0 0 9px rgba(74, 222, 128, 0.95); }
-  6%   { opacity: 0.3;  box-shadow: 0 0 1px rgba(74, 222, 128, 0.2); }
-  8%   { opacity: 1;    box-shadow: 0 0 12px rgba(74, 222, 128, 1); }
-  12%  { opacity: 0.5;  box-shadow: 0 0 3px rgba(74, 222, 128, 0.3); }
-  14%  { opacity: 1;    box-shadow: 0 0 10px rgba(74, 222, 128, 1); }
-  33%  { opacity: 0.36; box-shadow: 0 0 2px rgba(74, 222, 128, 0.25); }
-  35%  { opacity: 1;    box-shadow: 0 0 13px rgba(74, 222, 128, 1); }
-  46%  { opacity: 0.42; box-shadow: 0 0 2px rgba(74, 222, 128, 0.28); }
-  48%  { opacity: 0.34; box-shadow: 0 0 1px rgba(74, 222, 128, 0.2); }
-  50%  { opacity: 1;    box-shadow: 0 0 14px rgba(74, 222, 128, 1); }
-  73%  { opacity: 0.4;  box-shadow: 0 0 2px rgba(74, 222, 128, 0.26); }
-  75%  { opacity: 1;    box-shadow: 0 0 11px rgba(74, 222, 128, 1); }
-  95%  { opacity: 0.48; box-shadow: 0 0 3px rgba(74, 222, 128, 0.3); }
-  97%  { opacity: 1;    box-shadow: 0 0 10px rgba(74, 222, 128, 1); }
-  100% { opacity: 1;    box-shadow: 0 0 9px rgba(74, 222, 128, 0.95); }
+  0%   { opacity: 1; }
+  6%   { opacity: 0.3; }
+  8%   { opacity: 1; }
+  12%  { opacity: 0.5; }
+  14%  { opacity: 1; }
+  33%  { opacity: 0.36; }
+  35%  { opacity: 1; }
+  46%  { opacity: 0.42; }
+  48%  { opacity: 0.34; }
+  50%  { opacity: 1; }
+  73%  { opacity: 0.4; }
+  75%  { opacity: 1; }
+  95%  { opacity: 0.48; }
+  97%  { opacity: 1; }
+  100% { opacity: 1; }
 }
 
 /* Свет в модуле: живой источник — медленное дыхание плюс нестабильность
@@ -400,6 +406,7 @@ button { font: inherit; color: inherit; }
 .header-phone:hover { color: var(--accent); }
 
 .dot-badge {
+  box-shadow: 0 0 9px rgba(74, 222, 128, 0.95);
   width: 6px;
   height: 6px;
   border-radius: 50%;
@@ -768,6 +775,7 @@ button { font: inherit; color: inherit; }
   color: var(--text-dim);
 }
 .status-dot {
+  box-shadow: 0 0 9px rgba(74, 222, 128, 0.95);
   width: 7px;
   height: 7px;
   border-radius: 50%;
@@ -2284,6 +2292,7 @@ a.contact-detail-v:hover { color: var(--accent); }
 .dock-status-text { font-variant-numeric: tabular-nums; }
 
 .dock-status-dot {
+  box-shadow: 0 0 9px rgba(74, 222, 128, 0.95);
   width: 5px;
   height: 5px;
   border-radius: 50%;
