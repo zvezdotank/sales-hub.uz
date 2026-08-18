@@ -2172,6 +2172,7 @@ a.contact-detail-v:hover { color: var(--accent); }
   color: var(--text-faint);
 }
 .footer-legal { display: flex; gap: 10px; flex-wrap: wrap; }
+.footer-by { color: var(--text-dim); }
 .footer-legal a { transition: color 0.2s ease; }
 .footer-legal a:hover { color: var(--accent); }
 
