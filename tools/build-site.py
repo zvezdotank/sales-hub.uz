@@ -376,15 +376,40 @@ def asset_version(rel_path: str) -> str:
 
 
 def picture(stem: str, preset: str, alt: str, cls: str, *, eager: bool = False, sizes: str = "") -> str:
-    """<picture> с AVIF + WebP, точными размерами и правильным приоритетом."""
-    w, h = MANIFEST[stem][preset]
+    """<picture> с AVIF + WebP, точными размерами и правильным приоритетом.
+
+    Если у набора есть уменьшенные копии (например шапка в 900 и 1280 точек
+    вдобавок к 1920), отдаём их все списком: браузер сам выберет подходящую под
+    экран. Телефону достаётся кадр втрое легче, а на широком мониторе ничего
+    не меняется.
+    """
+    variants = MANIFEST[stem]
+    # Уменьшенные копии не делаются больше исходника: если оригинал у́же 1920,
+    # основной размер совпадает с уменьшенным. Два кандидата с одинаковым
+    # описателем ширины — невалидный srcset, поэтому оставляем по одному на
+    # ширину, предпочитая основной набор.
+    by_width: dict[int, str] = {}
+    for name in variants:
+        if name != preset and not name.startswith(preset + "-"):
+            continue
+        width = variants[name][0]
+        if width not in by_width or name == preset:
+            by_width[width] = name
+    widths = [by_width[w] for w in sorted(by_width)]
+    w, h = variants[preset]
     loading = "" if eager else ' loading="lazy" decoding="async"'
     priority = ' fetchpriority="high" decoding="async"' if eager else ""
     sizes_attr = f' sizes="{sizes}"' if sizes else ""
+
+    def srcset(fmt: str) -> str:
+        return ", ".join(
+            f"assets/img/{stem}-{name}.{fmt} {variants[name][0]}w" for name in widths
+        )
+
     return (
         "<picture>"
-        f'<source type="image/avif" srcset="assets/img/{stem}-{preset}.avif"{sizes_attr}>'
-        f'<source type="image/webp" srcset="assets/img/{stem}-{preset}.webp"{sizes_attr}>'
+        f'<source type="image/avif" srcset="{srcset("avif")}"{sizes_attr}>'
+        f'<source type="image/webp" srcset="{srcset("webp")}"{sizes_attr}>'
         f'<img src="assets/img/{stem}-{preset}.webp" alt="{html.escape(alt, quote=True)}" '
         f'width="{w}" height="{h}" class="{cls}"{loading}{priority}>'
         "</picture>"

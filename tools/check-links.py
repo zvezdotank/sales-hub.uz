@@ -29,7 +29,13 @@ def main() -> int:
         for leftover in re.findall(r"\{\{[^}]*\}\}", text):
             problems.append(f"{page.name}: незаменённый тег {leftover}")
 
-        for ref in re.findall(r'(?:href|src|srcset)="([^"]+)"', text):
+        refs = re.findall(r'(?:href|src)="([^"]+)"', text)
+        # srcset — список кандидатов через запятую, у каждого свой описатель
+        # ширины: «файл.avif 900w, файл.avif 1280w». Разбираем на пути.
+        for value in re.findall(r'srcset="([^"]+)"', text):
+            refs += [c.strip().split()[0] for c in value.split(",") if c.strip()]
+
+        for ref in refs:
             if ref.startswith(EXTERNAL):
                 continue
 

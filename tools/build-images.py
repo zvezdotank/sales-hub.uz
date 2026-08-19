@@ -28,6 +28,11 @@ PRESETS = {
     "bg": 1200,      # декоративный фон секции контактов
 }
 
+# Фоны на всю ширину экрана отдаём в нескольких размерах. Телефону незачем
+# качать кадр шириной 1920 пикселей: при экране 390 точек ему хватает 900, и
+# это втрое меньше байт на самом крупном элементе первого экрана.
+EXTRA_WIDTHS = {"hero": (900, 1280)}
+
 # Какие размеры нужны каждому исходнику.
 PLAN = {
     "hero-rover":            ["hero"],
@@ -93,16 +98,27 @@ def main() -> int:
             print(f"{stem}.jpg  {im.width}x{im.height}  {src_path.stat().st_size // 1024} КБ")
 
             for preset in presets:
-                out = resize(im, PRESETS[preset])
-                manifest.setdefault(stem, {})[preset] = [out.width, out.height]
-
                 quality = QUALITY_OVERRIDE.get(preset, QUALITY)
-                for fmt in ("avif", "webp"):
-                    dst = OUT / f"{stem}-{preset}.{fmt}"
-                    out.save(dst, format=fmt.upper(), quality=quality[fmt])
-                    size = dst.stat().st_size
-                    total += size
-                    print(f"    → {dst.name:38s} {out.width}x{out.height}  {size // 1024} КБ")
+                variants = [(preset, PRESETS[preset])]
+                variants += [(f"{preset}-{w}", w) for w in EXTRA_WIDTHS.get(preset, ())]
+
+                # Апскейла нет: если оригинал у́же нужной ширины, уменьшенная
+                # копия совпадёт с основной байт в байт. Такие пропускаем —
+                # иначе в репозитории копятся файлы, на которые никто не
+                # ссылается, а браузеру предлагаются два одинаковых варианта.
+                made: set = set()
+                for name, width in variants:
+                    out = resize(im, width)
+                    if out.width in made:
+                        continue
+                    made.add(out.width)
+                    manifest.setdefault(stem, {})[name] = [out.width, out.height]
+                    for fmt in ("avif", "webp"):
+                        dst = OUT / f"{stem}-{name}.{fmt}"
+                        out.save(dst, format=fmt.upper(), quality=quality[fmt])
+                        size = dst.stat().st_size
+                        total += size
+                        print(f"    → {dst.name:38s} {out.width}x{out.height}  {size // 1024} КБ")
 
     (OUT / "manifest.json").write_text(
         json.dumps(manifest, indent=2, sort_keys=True) + "\n", encoding="utf-8"

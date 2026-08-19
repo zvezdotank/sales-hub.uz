@@ -124,22 +124,6 @@ button { font: inherit; color: inherit; }
   animation: twinkle 4s ease-in-out infinite;
 }
 
-.scan-overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 40;
-  pointer-events: none;
-  background: repeating-linear-gradient(
-    to bottom,
-    rgba(255, 255, 255, 0.012) 0px,
-    rgba(255, 255, 255, 0.012) 1px,
-    transparent 1px,
-    transparent 3px
-  );
-  mix-blend-mode: overlay;
-  opacity: 0.5;
-}
-
 @keyframes twinkle {
   0%, 100% { opacity: 0.15; }
   50% { opacity: 0.9; }
@@ -489,9 +473,11 @@ button { font: inherit; color: inherit; }
   width: 900px;
   height: 900px;
   border-radius: 50%;
+  /* Было ещё blur(2px) и mix-blend-mode: screen. Оба дорогие: размытие
+     держит отдельную поверхность 900×900, наложение заставляет смешивать её
+     с фоном на каждом кадре. Сравнение кадров показало разницу в 4 единицы
+     яркости из 255 — градиент и без них такой же мягкий. */
   background: radial-gradient(circle at 35% 35%, rgba(255,181,71,0.14), rgba(255,181,71,0.02) 45%, transparent 70%);
-  filter: blur(2px);
-  mix-blend-mode: screen;
   z-index: 0;
 }
 
