@@ -31,7 +31,11 @@
      системным шрифтом, по-разному на каждом устройстве.
      Michroma оставлена: она используется только для латиницы и цифр. */
   --font-accent: 'Michroma', 'Manrope', system-ui, sans-serif;
-  --font-body: 'Manrope', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  /* «Manrope Fallback» — не отдельный шрифт, а тот же системный, но с
+     подогнанной шириной: строка в нём занимает почти столько же места, что и
+     в Manrope. Пока основной шрифт едет, текст рисуется запасным, и без этой
+     подгонки строки перевёрстываются на подмене — вёрстка прыгает. */
+  --font-body: 'Manrope', 'Manrope Fallback', system-ui, -apple-system, 'Segoe UI', sans-serif;
   --font-mono: 'JetBrains Mono', ui-monospace, 'SF Mono', monospace;
 
   --radius: 14px;
@@ -468,8 +472,12 @@ button { font: inherit; color: inherit; }
 
 .hero-planet {
   position: absolute;
-  top: -30%;
-  right: -15%;
+  /* В пикселях, а не в процентах: проценты считаются от высоты первого
+     экрана, а она меняется, когда подгружаются шрифты и заголовок
+     перевёрстывается. Планета уезжала вслед за ней — и это давало сдвиг
+     вёрстки до 0.06, который Google учитывает при ранжировании. */
+  top: -300px;
+  right: -216px;
   width: 900px;
   height: 900px;
   border-radius: 50%;
