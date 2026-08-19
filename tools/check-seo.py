@@ -28,8 +28,10 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 DATA = ROOT / "site.json"
 
-# Служебный файл подтверждения владения доменом — не наша страница.
-IGNORE = {"googled3544b816083e618.html"}
+# Служебные файлы подтверждения прав на домен — это не наши страницы, а
+# заглушки заданного поисковиком вида. Требовать от них заголовков, описаний
+# и микроразметки бессмысленно: содержимое диктует Google или Яндекс.
+IGNORE_PREFIXES = ("google", "yandex_")
 
 # Страницы, закрытые от индексации: к ним не предъявляем требований по
 # метатегам и объёму текста.
@@ -304,7 +306,7 @@ def main() -> int:
 
     pages: dict[str, Page] = {}
     for path in sorted(ROOT.glob("*.html")):
-        if path.name in IGNORE:
+        if path.name.startswith(IGNORE_PREFIXES):
             continue
         pages[path.name] = Page(path.name)
         pages[path.name].feed(path.read_text(encoding="utf-8"))
