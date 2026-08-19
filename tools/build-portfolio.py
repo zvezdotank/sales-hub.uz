@@ -326,8 +326,33 @@ def shot_url(item: dict) -> str:
         return public
 
 
+# Закреплённые элементы прячем перед съёмкой полос: иначе шапка сайта
+# повторится на каждой полосе и в готовом кадре получится лесенка из шапок.
+# Первую полосу снимаем до этого — там шапка на своём месте, как её и видит
+# посетитель.
+HIDE_FIXED_JS = """
+(() => {
+  for (const el of document.querySelectorAll('body *')) {
+    const cs = getComputedStyle(el);
+    if (cs.position === 'fixed' || cs.position === 'sticky') {
+      el.style.setProperty('visibility', 'hidden', 'important');
+    }
+  }
+  return 1;
+})()
+"""
+
+
 def shoot(browser: Browser, url: str) -> Image.Image:
-    """Кадр во всю длину страницы."""
+    """Кадр во всю длину страницы, снятый полосами.
+
+    Раньше страница снималась одним запросом с captureBeyondViewport — браузер
+    сам растягивал вьюпорт на всю высоту документа. На большинстве сайтов это
+    работает, но не на всех: у обновлённого gpn-oil.uz нижняя половина кадра
+    выходила пустой, хотя в обычном окне та же область рисуется полностью.
+    Поэтому снимаем как человек: прокручиваем окно и склеиваем полосы. Медленнее
+    на несколько секунд, зато одинаково надёжно везде.
+    """
     browser.call("Page.enable")
     browser.call(
         "Emulation.setDeviceMetricsOverride",
@@ -354,18 +379,36 @@ def shoot(browser: Browser, url: str) -> Image.Image:
 
     metrics = browser.call("Page.getLayoutMetrics")
     size = metrics.get("cssContentSize") or metrics["contentSize"]
-    height = min(round(size["height"]), MAX_SHOT_HEIGHT)
-    if round(size["height"]) > MAX_SHOT_HEIGHT:
-        print(f"    ! страница {round(size['height'])}px, снимаю первые {MAX_SHOT_HEIGHT}px", file=sys.stderr)
+    full = round(size["height"])
+    height = min(full, MAX_SHOT_HEIGHT)
+    if full > MAX_SHOT_HEIGHT:
+        print(f"    ! страница {full}px, снимаю первые {MAX_SHOT_HEIGHT}px", file=sys.stderr)
 
-    shot = browser.call(
-        "Page.captureScreenshot",
-        format="png",
-        captureBeyondViewport=True,
-        clip={"x": 0, "y": 0, "width": VIEWPORT[0], "height": height, "scale": 1},
-    )
-    with Image.open(io.BytesIO(base64.b64decode(shot["data"]))) as raw:
-        return raw.convert("RGB")
+    step = VIEWPORT[1]
+    canvas = Image.new("RGB", (VIEWPORT[0], height))
+    offset = 0
+    first = True
+
+    while offset < height:
+        browser.evaluate(f"(() => {{ window.scrollTo(0, {offset}); return 1; }})()",
+                         await_promise=False)
+        time.sleep(0.25)
+        # Дальше конца страницы браузер не прокрутит — узнаём, где он встал,
+        # и вставляем полосу именно туда, иначе низ кадра поедет.
+        real = round(browser.evaluate("window.scrollY", await_promise=False))
+        shot = browser.call("Page.captureScreenshot", format="png")
+        with Image.open(io.BytesIO(base64.b64decode(shot["data"]))) as raw:
+            band = raw.convert("RGB")
+        canvas.paste(band, (0, real))
+
+        if first:
+            browser.evaluate(HIDE_FIXED_JS, await_promise=False)
+            first = False
+        if real + step >= height:
+            break
+        offset = real + step
+
+    return canvas
 
 
 # -------------------------------------------------------------------- сборка
