@@ -34,6 +34,18 @@
     </div>
   </section>
 
+{{? page.intro }}
+  <section class="service-intro" aria-labelledby="intro-title">
+    <div class="section-inner">
+      <div class="intro-body">
+        <h2 id="intro-title">{{ page.introTitle }}</h2>
+        {{# page.intro }}<p>{{& . }}</p>
+        {{/ page.intro }}
+      </div>
+    </div>
+  </section>
+{{/ page.intro }}
+
   <section class="works works--page" id="works" aria-label="Работы">
     <div class="section-inner">
 {{> _works }}

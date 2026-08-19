@@ -13,6 +13,7 @@ import hashlib
 import html
 import json
 import re
+import subprocess
 import sys
 from datetime import date
 from pathlib import Path
@@ -727,6 +728,12 @@ def main() -> int:
     written.append(("404.html", page404))
 
     # ---- запись
+    # Что лежало на диске до сборки — нужно, чтобы отличить страницы, которые
+    # правда изменились, от тех, что пересобрались без единой правки.
+    before = {
+        name: (ROOT / name).read_text(encoding="utf-8") if (ROOT / name).exists() else None
+        for name, _ in written
+    }
     for name, content in written:
         (ROOT / name).write_text(content, encoding="utf-8")
         print(f"  ✓ {name:22s} {len(content.encode()) // 1024:>3} КБ")
@@ -744,8 +751,32 @@ def main() -> int:
     if data.get("portfolioPage"):
         urls.append((f"{s['origin']}/{data['portfolioPage']['slug']}.html", "0.7", "monthly"))
     today = date.today().isoformat()
+    fresh = {name for name, content in written if before.get(name) != content}
+
+    def last_changed(url: str) -> str:
+        """Когда страница правда менялась.
+
+        Раньше здесь стояла сегодняшняя дата для всех страниц сразу: каждая
+        пересборка сообщала поисковику, что весь сайт обновился целиком. От
+        таких дат он быстро перестаёт зависеть — и перестаёт замечать, когда
+        страница изменилась на самом деле. Теперь дата берётся из истории
+        репозитория, а страницы, изменившиеся прямо сейчас, помечаются
+        сегодняшним числом.
+        """
+        name = url.rsplit("/", 1)[-1] or "index.html"
+        if name in fresh:
+            return today
+        try:
+            out = subprocess.run(
+                ["git", "log", "-1", "--format=%cs", "--", name],
+                cwd=ROOT, capture_output=True, text=True, timeout=5,
+            )
+            return out.stdout.strip() or today
+        except (OSError, subprocess.SubprocessError):
+            return today
+
     body = "\n".join(
-        f"  <url>\n    <loc>{u}</loc>\n    <lastmod>{today}</lastmod>\n"
+        f"  <url>\n    <loc>{u}</loc>\n    <lastmod>{last_changed(u)}</lastmod>\n"
         f"    <changefreq>{cf}</changefreq>\n    <priority>{p}</priority>\n  </url>"
         for u, p, cf in urls
     )
