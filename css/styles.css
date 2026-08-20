@@ -562,7 +562,11 @@ button { font: inherit; color: inherit; }
   gap: 6px;
   padding: 9px 4px;
   border-radius: 10px;
-  color: var(--text-faint);
+/* Цвет ярче общего токена не для красоты: панель полупрозрачная и лежит
+   поверх светлой части фотографии, поэтому фон под подписью светлее, чем
+   на остальном сайте. Замер по реальным пикселям кадра показывал 4.16
+   при норме 4.5 — с этим цветом норма выполняется. */
+  color: var(--text-dim);
   font-family: var(--font-mono);
   font-size: 10px;
   letter-spacing: 0.02em;
@@ -729,7 +733,7 @@ button { font: inherit; color: inherit; }
   font-family: var(--font-mono);
   font-size: 11px;
   letter-spacing: 0.05em;
-  color: var(--text-dim);
+  color: var(--text);
 }
 .status-dot {
   box-shadow: 0 0 9px rgba(74, 222, 128, 0.95);
@@ -762,7 +766,7 @@ button { font: inherit; color: inherit; }
   letter-spacing: 0.08em;
   color: var(--text);
 }
-.minimap-sub { font-size: 11.5px; color: var(--text-faint); margin-top: 3px; }
+.minimap-sub { font-size: 11.5px; color: var(--text-dim); margin-top: 3px; }
 .expand-ico { color: var(--text-faint); flex-shrink: 0; }
 .minimap-route { width: 100%; height: 70px; margin-bottom: 14px; }
 .minimap-btn {
@@ -806,7 +810,7 @@ button { font: inherit; color: inherit; }
   bottom: -22px;
   font-family: var(--font-mono);
   font-size: 10px;
-  color: var(--text-faint);
+  color: var(--text-dim);
 }
 
 /* нижняя лента героя */
